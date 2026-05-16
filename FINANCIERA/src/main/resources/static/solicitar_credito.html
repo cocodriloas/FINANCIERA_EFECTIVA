@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Préstamo - Financiera Efectiva</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body { background-color: #f4f5f0; }
+        .sidebar {
+            min-height: 100vh;
+            background-color: var(--efectiva-dark-blue);
+            width: 260px;
+            position: fixed;
+            top: 0; left: 0; z-index: 100;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500; padding: 0.8rem 1.5rem; border-radius: 8px;
+        }
+        .sidebar .nav-link.active { color: #fff; background-color: rgba(255, 255, 255, 0.1); }
+        .main-content { margin-left: 260px; padding: 2rem; }
+
+        .stepper-item { flex: 1; text-align: center; position: relative; }
+        .stepper-item::after {
+            content: ""; position: absolute; background: #dee2e6;
+            height: 2px; width: 100%; top: 20px; left: 50%; z-index: -1;
+        }
+        .stepper-item:last-child::after { display: none; }
+        .step-counter {
+            width: 40px; height: 40px; background: #dee2e6;
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; margin: 0 auto 10px; font-weight: bold;
+        }
+        .stepper-item.active .step-counter { background: var(--efectiva-blue); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar p-3 d-flex flex-column">
+    <h3 class="text-white fw-bold mb-4 px-3 mt-2">Σfectiva</h3>
+    <ul class="nav flex-column mb-auto">
+        <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
+        <li class="nav-item"><a href="ahorros.html" class="nav-link"><i class="bi bi-wallet2 me-2"></i> Mis Ahorros</a></li>
+        <li class="nav-item"><a href="creditos.html" class="nav-link active"><i class="bi bi-cash-stack me-2"></i> Mis Créditos</a></li>
+        <li class="nav-item"><a href="transferencias.html" class="nav-link"><i class="bi bi-arrow-left-right me-2"></i> Transferencias</a></li>
+        <li class="nav-item"><a href="perfil.html" class="nav-link"><i class="bi bi-person me-2"></i> Mi Perfil</a></li>
+    </ul>
+    <div class="mt-auto"><a href="index.html" class="nav-link text-danger"><i class="bi bi-box-arrow-left me-2"></i> Cerrar Sesión</a></div>
+</div>
+
+<div class="main-content">
+    <header class="mb-5 text-center">
+        <h4 class="fw-bold text-dark">Nueva Solicitud de Crédito</h4>
+        <p class="text-muted">Completa los datos para evaluar tu préstamo en minutos.</p>
+    </header>
+
+    <div class="d-flex justify-content-between mb-5 px-5">
+        <div class="stepper-item active">
+            <div class="step-counter shadow-sm">1</div>
+            <div class="small fw-bold">Configuración</div>
+        </div>
+        <div class="stepper-item">
+            <div class="step-counter">2</div>
+            <div class="small">Verificación</div>
+        </div>
+        <div class="stepper-item">
+            <div class="step-counter">3</div>
+            <div class="small">Finalizado</div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+                <form action="creditos.html" method="GET">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">¿Qué préstamo necesitas? *</label>
+                            <select class="form-select border-0 bg-light py-2 shadow-sm" required>
+                                <option value="">Selecciona una opción</option>
+                                <option>Préstamo Personal</option>
+                                <option>Crédito vehicular</option>
+                                <option>Crédito Hipotecario</option>
+                                <option>Efectivo Altoque</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Monto solicitado (S/) *</label>
+                            <input type="number" class="form-control border-0 bg-light py-2 shadow-sm" placeholder="Ej: 5000" min="500" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Plazo (Meses) *</label>
+                            <select class="form-select border-0 bg-light py-2 shadow-sm" required>
+                                <option>6 meses</option>
+                                <option>12 meses</option>
+                                <option selected>24 meses</option>
+                                <option>36 meses</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">¿Para qué lo usarás? *</label>
+                            <input type="text" class="form-control border-0 bg-light py-2 shadow-sm" placeholder="Ej: Viajes, Salud, Estudios" required>
+                        </div>
+
+                        <div class="col-12 mt-5">
+                            <div class="bg-primary-subtle p-3 rounded-3 mb-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-primary fw-bold">Cuota mensual estimada:</span>
+                                    <span class="fs-4 fw-bold text-primary">S/ 245.50 *</span>
+                                </div>
+                                <p class="small text-primary mb-0 mt-1">* Sujeto a evaluación crediticia y TCEA vigente.</p>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow">
+                                Enviar Solicitud a Evaluación
+                            </button>
+                            <div class="text-center mt-3">
+                                <a href="creditos.html" class="text-muted text-decoration-none small">Cancelar y volver</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

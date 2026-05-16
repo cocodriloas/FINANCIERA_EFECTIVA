@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Ahorros - Financiera Efectiva</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body { background-color: #f4f5f0; }
+
+        /* Estilos del Sidebar (Igual que el dashboard) */
+        .sidebar {
+            min-height: 100vh;
+            background-color: var(--efectiva-dark-blue);
+            width: 260px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            padding: 0.8rem 1.5rem;
+            margin-bottom: 0.2rem;
+            border-radius: 8px;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+        }
+
+        /* Tarjetas de Cuentas */
+        .account-card {
+            border-left: 5px solid var(--efectiva-cyan);
+            transition: transform 0.2s;
+        }
+        .account-card:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar p-3 d-flex flex-column">
+    <h3 class="text-white fw-bold mb-4 px-3 mt-2">Σfectiva</h3>
+    <ul class="nav flex-column mb-auto">
+        <li class="nav-item">
+            <a href="dashboard.html" class="nav-link">
+                <i class="bi bi-house-door me-2"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="ahorros.html" class="nav-link active">
+                <i class="bi bi-wallet2 me-2"></i> Mis Ahorros
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="creditos.html" class="nav-link">
+                <i class="bi bi-cash-stack me-2"></i> Mis Créditos
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="transferencias.html" class="nav-link">
+                <i class="bi bi-arrow-left-right me-2"></i> Transferencias
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="perfil.html" class="nav-link">
+                <i class="bi bi-person me-2"></i> Mi Perfil
+            </a>
+        </li>
+    </ul>
+    <div class="mt-auto">
+        <a href="index.html" class="nav-link text-danger">
+            <i class="bi bi-box-arrow-left me-2"></i> Cerrar Sesión
+        </a>
+    </div>
+</div>
+
+<div class="main-content">
+    <header class="mb-4">
+        <h4 class="fw-bold mb-1 text-dark">Mis Ahorros</h4>
+        <p class="text-muted small">Consulta tus saldos, depósitos y estado de cuenta.</p>
+    </header>
+
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3 mb-md-0">
+            <div class="card account-card border-0 shadow-sm rounded-3 h-100 p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-0">Cuenta Sueldo Digital</h6>
+                        <span class="small text-muted">N° 0011-0456-0200897456</span>
+                    </div>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Activa</span>
+                </div>
+                <h3 class="fw-bold text-primary mb-3">S/ 4,500.00</h3>
+                <div class="d-flex gap-2 mt-auto">
+                    <button class="btn btn-outline-primary btn-sm rounded-pill px-3">Ver detalles</button>
+                    <a href="transferencias.html" class="btn btn-primary btn-sm rounded-pill px-3">Transferir</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card account-card border-0 shadow-sm rounded-3 h-100 p-4" style="border-left-color: var(--efectiva-blue);">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-0">Depósito a Plazo Fijo</h6>
+                        <span class="small text-muted">N° 0011-0899-0200112233</span>
+                    </div>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Tasa: 6.0%</span>
+                </div>
+                <h3 class="fw-bold text-primary mb-3">S/ 10,000.00</h3>
+                <div class="d-flex gap-2 mt-auto">
+                    <button class="btn btn-outline-primary btn-sm rounded-pill px-3">Simular nuevo depósito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                <h5 class="fw-bold mb-0 text-dark">Estado de Cuenta</h5>
+                <div class="d-flex gap-2">
+                    <select class="form-select form-select-sm border-0 bg-light" style="width: auto;">
+                        <option>Mayo 2026</option>
+                        <option>Abril 2026</option>
+                        <option>Marzo 2026</option>
+                    </select>
+                    <button class="btn btn-light btn-sm text-primary fw-medium border"><i class="bi bi-download me-1"></i> Descargar PDF</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th class="text-muted fw-medium py-3">Fecha</th>
+                        <th class="text-muted fw-medium py-3">Concepto</th>
+                        <th class="text-muted fw-medium py-3 text-center">N° Operación</th>
+                        <th class="text-muted fw-medium py-3 text-end">Cargo</th>
+                        <th class="text-muted fw-medium py-3 text-end">Abono</th>
+                        <th class="text-muted fw-medium py-3 text-end">Saldo Final</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="py-3">14/05/2026</td>
+                        <td>
+                            <div class="fw-medium text-dark">Transferencia a terceros</div>
+                            <div class="small text-muted">A: Yape - Juan Pérez</div>
+                        </td>
+                        <td class="text-center text-muted small">0998234</td>
+                        <td class="text-danger text-end fw-medium">-45.00</td>
+                        <td class="text-end">-</td>
+                        <td class="text-end fw-bold">4,500.00</td>
+                    </tr>
+                    <tr>
+                        <td class="py-3">12/05/2026</td>
+                        <td>
+                            <div class="fw-medium text-dark">Pago de Servicios</div>
+                            <div class="small text-muted">Luz del Sur S.A.A.</div>
+                        </td>
+                        <td class="text-center text-muted small">0990112</td>
+                        <td class="text-danger text-end fw-medium">-120.50</td>
+                        <td class="text-end">-</td>
+                        <td class="text-end fw-bold">4,545.00</td>
+                    </tr>
+                    <tr>
+                        <td class="py-3">10/05/2026</td>
+                        <td>
+                            <div class="fw-medium text-dark">Abono de Planilla</div>
+                            <div class="small text-muted">Empresa XYZ SAC</div>
+                        </td>
+                        <td class="text-center text-muted small">0443299</td>
+                        <td class="text-end">-</td>
+                        <td class="text-success text-end fw-medium">+2,500.00</td>
+                        <td class="text-end fw-bold">4,665.50</td>
+                    </tr>
+                    <tr>
+                        <td class="py-3">05/05/2026</td>
+                        <td>
+                            <div class="fw-medium text-dark">Depósito en Efectivo</div>
+                            <div class="small text-muted">Agencia Huancayo Centro</div>
+                        </td>
+                        <td class="text-center text-muted small">0112345</td>
+                        <td class="text-end">-</td>
+                        <td class="text-success text-end fw-medium">+150.00</td>
+                        <td class="text-end fw-bold">2,165.50</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+/* Variables de colores corporativos Efectiva */
+:root {
+    --efectiva-blue: #2334e8;      /* Azul principal de los botones */
+    --efectiva-dark-blue: #151a6a; /* Azul oscuro para títulos */
+    --efectiva-cyan: #39c2c2;      /* Turquesa del fondo principal */
+}
+
+/* Tipografía general */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f5f0; /* Color gris perla del fondo del sitio */
+}
+
+/* Tipografía para títulos especiales */
+.font-serif {
+    font-family: 'Merriweather', serif;
+}
+
+/* Sobreescribiendo colores de Bootstrap */
+.text-primary {
+    color: var(--efectiva-blue) !important;
+}
+
+.btn-primary {
+    background-color: var(--efectiva-blue);
+    border-color: var(--efectiva-blue);
+}
+
+.btn-primary:hover {
+    background-color: var(--efectiva-dark-blue);
+    border-color: var(--efectiva-dark-blue);
+}
+
+.btn-outline-primary {
+    color: var(--efectiva-dark-blue);
+    border-color: var(--efectiva-dark-blue);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--efectiva-dark-blue);
+    color: white;
+}
+
+/* Estilos específicos de secciones */
+.hero-section {
+    background-color: var(--efectiva-cyan);
+    /* El banner real tiene una forma azul diagonal, podemos agregarla con CSS avanzado más adelante si lo deseas */
+}
