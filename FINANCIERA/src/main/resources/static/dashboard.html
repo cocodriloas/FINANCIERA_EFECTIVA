@@ -3,170 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Banco - Financiera Efectiva</title>
+    <title>Dashboard - Financiera Efectiva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f4f5f0; }
-
-        /* Estilos del Sidebar */
+        :root { --efectiva-blue: #1a3fbf; }
+        body { background: #f0f4ff; font-family: 'Inter', sans-serif; }
         .sidebar {
+            background: var(--efectiva-blue);
             min-height: 100vh;
-            background-color: var(--efectiva-dark-blue);
-            width: 260px;
+            width: 240px;
             position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 100;
-        }
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 500;
-            padding: 0.8rem 1.5rem;
-            margin-bottom: 0.2rem;
-            border-radius: 8px;
-        }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Ajuste del contenido principal para no pisar el sidebar */
-        .main-content {
-            margin-left: 260px;
-            padding: 2rem;
-        }
-
-        /* Tarjeta de Saldo */
-        .card-balance {
-            background-color: var(--efectiva-blue);
+            top: 0; left: 0;
+            padding: 2rem 1rem;
             color: white;
-            border: none;
-            border-radius: 1rem;
         }
+        .sidebar .logo { font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; }
+        .sidebar a {
+            display: block; color: rgba(255,255,255,0.8);
+            text-decoration: none; padding: 0.6rem 1rem;
+            border-radius: 8px; margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+        .main-content { margin-left: 240px; padding: 2rem; }
+        .card-saldo {
+            background: linear-gradient(135deg, var(--efectiva-blue), #2d5be3);
+            color: white; border-radius: 16px;
+            padding: 1.5rem; margin-bottom: 1rem;
+        }
+        .card-accion {
+            background: white; border-radius: 12px;
+            padding: 1.2rem; text-align: center;
+            cursor: pointer; transition: transform 0.2s;
+            text-decoration: none; color: inherit;
+            display: block;
+        }
+        .card-accion:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .card-accion .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .top-bar {
+            background: white; border-radius: 12px;
+            padding: 1rem 1.5rem; margin-bottom: 1.5rem;
+            display: flex; justify-content: space-between;
+            align-items: center;
+        }
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 4px; height: 20px;
+        }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
     </style>
 </head>
 <body>
 
-<div class="sidebar p-3 d-flex flex-column">
-    <h3 class="text-white fw-bold mb-4 px-3 mt-2">Σfectiva</h3>
-    <ul class="nav flex-column mb-auto">
-        <li class="nav-item">
-            <a href="dashboard.html" class="nav-link active">
-                <i class="bi bi-house-door me-2"></i> Dashboard
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="ahorros.html" class="nav-link">
-                <i class="bi bi-wallet2 me-2"></i> Mis Ahorros
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="creditos.html" class="nav-link">
-                <i class="bi bi-cash-stack me-2"></i> Mis Créditos
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="transferencias.html" class="nav-link">
-                <i class="bi bi-arrow-left-right me-2"></i> Transferencias
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="perfil.html" class="nav-link">
-                <i class="bi bi-person me-2"></i> Mi Perfil
-            </a>
-        </li>
-    </ul>
-    <div class="mt-auto">
-        <a href="index.html" class="nav-link text-danger">
-            <i class="bi bi-box-arrow-left me-2"></i> Cerrar Sesión
-        </a>
-    </div>
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="logo">Σfectiva</div>
+    <a href="dashboard.html" class="active">🏠 Inicio</a>
+    <a href="ahorros.html">💰 Mis Ahorros</a>
+    <a href="creditos.html">📋 Mis Créditos</a>
+    <a href="solicitar_credito.html">➕ Solicitar Préstamo</a>
+    <a href="transferencias.html">↔️ Transferencias</a>
+    <a href="perfil.html">👤 Mi Perfil</a>
+    <hr style="border-color:rgba(255,255,255,0.2); margin: 1rem 0;">
+    <a href="login.html" id="btn-cerrar">🚪 Cerrar Sesión</a>
 </div>
 
+<!-- Contenido principal -->
 <div class="main-content">
-    <header class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold mb-0 text-dark">Hola, Carlo 👋</h4>
-        <div class="bg-white px-3 py-2 rounded-pill shadow-sm text-muted">
-            <i class="bi bi-calendar-event me-2"></i> 14 de Mayo, 2026
-        </div>
-    </header>
 
+    <!-- Top bar -->
+    <div class="top-bar">
+        <div>
+            <span class="text-muted small">Bienvenido,</span>
+            <strong id="nombre-usuario" class="d-block">Cargando...</strong>
+        </div>
+        <div class="text-muted small" id="fecha-hora"></div>
+    </div>
+
+    <!-- Tarjetas de saldo -->
     <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="card card-balance shadow-sm p-4">
-                <h6 class="fw-normal mb-1 opacity-75">Saldo Disponible Total</h6>
-                <h2 class="display-5 fw-bold mb-3">S/ 4,500.00</h2>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="small opacity-75">Cuenta Sueldo Digital ***4589</span>
-                    <a href="transferencias.html" class="btn btn-light btn-sm rounded-pill text-primary fw-bold px-3">Transferir</a>
+        <div class="col-md-5">
+            <div class="card-saldo">
+                <div class="small opacity-75 mb-1">Cuenta de Ahorros</div>
+                <div id="numero-cuenta" class="small opacity-75 mb-2">Cargando...</div>
+                <div class="d-flex align-items-end gap-2">
+                    <span class="small opacity-75">S/</span>
+                    <span id="saldo-principal" style="font-size:2.2rem; font-weight:700; line-height:1">
+                        <span class="skeleton" style="width:120px; display:inline-block;">&nbsp;</span>
+                    </span>
+                </div>
+                <div class="small opacity-75 mt-1" id="moneda-cuenta">Soles (PEN)</div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="row g-3">
+                <div class="col-6">
+                    <a href="solicitar_credito.html" class="card-accion">
+                        <div class="icon">💳</div>
+                        <div class="fw-semibold small">Solicitar Préstamo</div>
+                        <div class="text-muted" style="font-size:0.75rem">Hasta S/ 6,000</div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="transferencias.html" class="card-accion">
+                        <div class="icon">↔️</div>
+                        <div class="fw-semibold small">Transferir</div>
+                        <div class="text-muted" style="font-size:0.75rem">A otras cuentas</div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="creditos.html" class="card-accion">
+                        <div class="icon">📋</div>
+                        <div class="fw-semibold small">Mis Créditos</div>
+                        <div class="text-muted" style="font-size:0.75rem">Ver cuotas</div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="perfil.html" class="card-accion">
+                        <div class="icon">👤</div>
+                        <div class="fw-semibold small">Mi Perfil</div>
+                        <div class="text-muted" style="font-size:0.75rem">Ver datos</div>
+                    </a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm rounded-4 h-100 p-4 bg-white d-flex flex-column justify-content-center align-items-center text-center">
-                <div class="text-primary mb-2"><i class="bi bi-shield-check fs-1"></i></div>
-                <h5 class="fw-bold">Tu dinero está seguro</h5>
-                <p class="text-muted small mb-0">Opera con total tranquilidad en nuestra nueva banca digital.</p>
+    <!-- Últimos movimientos placeholder -->
+    <div class="bg-white rounded-3 p-3">
+        <h6 class="fw-bold mb-3">Últimos movimientos</h6>
+        <div id="lista-movimientos">
+            <div class="text-center text-muted py-4">
+                <div style="font-size:2rem">📭</div>
+                <div class="small">Sin movimientos recientes</div>
             </div>
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="fw-bold mb-0 text-dark">Últimos Movimientos</h5>
-                <a href="ahorros.html" class="text-decoration-none text-primary small fw-bold">Ver todos</a>
-            </div>
-
-            <div class="table-responsive">
-                <table class="table table-borderless align-middle">
-                    <thead class="table-light border-bottom">
-                    <tr>
-                        <th class="text-muted fw-medium py-3">Fecha</th>
-                        <th class="text-muted fw-medium py-3">Descripción</th>
-                        <th class="text-muted fw-medium py-3">Operación</th>
-                        <th class="text-muted fw-medium text-end py-3">Monto</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="border-bottom">
-                        <td class="py-3">14 May 2026</td>
-                        <td>
-                            <div class="fw-bold text-dark">Transferencia Yape</div>
-                            <div class="small text-muted">A: Juan Pérez</div>
-                        </td>
-                        <td class="text-muted">TRX-9982</td>
-                        <td class="text-danger text-end fw-bold">- S/ 45.00</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="py-3">12 May 2026</td>
-                        <td>
-                            <div class="fw-bold text-dark">Pago de Servicios</div>
-                            <div class="small text-muted">Luz del Sur</div>
-                        </td>
-                        <td class="text-muted">TRX-9901</td>
-                        <td class="text-danger text-end fw-bold">- S/ 120.50</td>
-                    </tr>
-                    <tr>
-                        <td class="py-3">10 May 2026</td>
-                        <td>
-                            <div class="fw-bold text-dark">Abono de Planilla</div>
-                            <div class="small text-muted">Empresa XYZ SAC</div>
-                        </td>
-                        <td class="text-muted">DEP-4432</td>
-                        <td class="text-success text-end fw-bold">+ S/ 2,500.00</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Cargar datos del usuario desde localStorage
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+
+    if (!usuario || !usuario.id) {
+        window.location.href = 'login.html';
+    }
+
+    // Mostrar nombre
+    document.getElementById('nombre-usuario').textContent = usuario.nombres || 'Usuario';
+
+    // Fecha y hora actual
+    function actualizarHora() {
+        const ahora = new Date();
+        document.getElementById('fecha-hora').textContent =
+            ahora.toLocaleDateString('es-PE', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    }
+    actualizarHora();
+
+    // Cerrar sesión
+    document.getElementById('btn-cerrar').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('usuario');
+        window.location.href = 'login.html';
+    });
+
+    // Cargar cuentas del usuario
+    async function cargarCuentas() {
+        try {
+            const response = await fetch(`http://localhost:8080/api/cuentas/usuario/${usuario.id}`);
+            const result = await response.json();
+
+            if (result.success && result.cuentas.length > 0) {
+                const cuenta = result.cuentas[0];
+                document.getElementById('saldo-principal').textContent =
+                    parseFloat(cuenta.saldo).toLocaleString('es-PE', { minimumFractionDigits: 2 });
+                document.getElementById('numero-cuenta').textContent =
+                    'N° ' + cuenta.numeroCuenta;
+            } else {
+                document.getElementById('saldo-principal').textContent = '0.00';
+                document.getElementById('numero-cuenta').textContent = 'Sin cuenta activa';
+            }
+        } catch (error) {
+            document.getElementById('saldo-principal').textContent = 'Error';
+            console.error('Error cargando cuentas:', error);
+        }
+    }
+
+    cargarCuentas();
+</script>
 </body>
 </html>

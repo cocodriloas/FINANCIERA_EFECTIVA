@@ -3,180 +3,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Core Bancario - Reportes Internos</title>
+    <title>Reportes Gerenciales - Financiera Efectiva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/styles.css">
     <style>
-        body { background-color: #f0f2f5; }
-
-        /* Sidebar modo Admin */
+        :root { --efectiva-blue: #1a3fbf; }
+        body { background: #f0f4ff; font-family: 'Inter', sans-serif; }
         .sidebar {
-            min-height: 100vh;
-            background-color: #0b1142;
-            width: 260px;
-            position: fixed;
-            top: 0; left: 0; z-index: 100;
+            background: #0b1142; min-height: 100vh; width: 240px;
+            position: fixed; top: 0; left: 0; padding: 2rem 1rem; color: white;
         }
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 500; padding: 0.8rem 1.5rem; border-radius: 8px; margin-bottom: 0.2rem;
+        .sidebar .logo { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .sidebar .rol { font-size: 0.75rem; opacity: 0.6; margin-bottom: 2rem; }
+        .sidebar a {
+            display: block; color: rgba(255,255,255,0.8); text-decoration: none;
+            padding: 0.6rem 1rem; border-radius: 8px; margin-bottom: 0.3rem; font-size: 0.9rem;
         }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            color: #fff; background-color: rgba(255, 255, 255, 0.1);
-        }
-        .main-content { margin-left: 260px; padding: 2rem; }
-
-        /* Tarjetas de KPI */
+        .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.15); color: white; }
+        .main-content { margin-left: 240px; padding: 2rem; }
         .kpi-card {
-            border-left: 5px solid;
+            background: white; border-radius: 12px; padding: 1.2rem;
+            border-left: 4px solid #1a3fbf;
         }
-        .border-blue { border-left-color: #0d6efd !important; }
-        .border-green { border-left-color: #198754 !important; }
-        .border-cyan { border-left-color: var(--efectiva-cyan) !important; }
+        .kpi-card.verde { border-left-color: #28a745; }
+        .kpi-card.rojo { border-left-color: #dc3545; }
+        .kpi-card.amarillo { border-left-color: #ffc107; }
+        .kpi-card.azul { border-left-color: #1a3fbf; }
+        .kpi-valor { font-size: 2rem; font-weight: 700; line-height: 1.1; }
+        .kpi-label { font-size: 0.8rem; color: #6c757d; margin-bottom: 0.3rem; }
+        .kpi-sub { font-size: 0.75rem; color: #adb5bd; margin-top: 0.3rem; }
+        .card-reporte { background: white; border-radius: 12px; padding: 1.5rem; }
+        .tabla-mora th { font-size: 0.8rem; color: #6c757d; font-weight: 500; }
+        .tabla-mora td { font-size: 0.85rem; }
+        .badge-clasificacion { padding: 0.3rem 0.7rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        .normal { background: #d4edda; color: #155724; }
+        .cpp { background: #fff3cd; color: #856404; }
+        .deficiente { background: #f8d7da; color: #721c24; }
+        .barra-container { background: #e9ecef; border-radius: 4px; height: 8px; }
+        .barra-fill { height: 100%; border-radius: 4px; }
+        .top-bar { background: white; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
     </style>
 </head>
 <body>
 
-<div class="sidebar p-3 d-flex flex-column">
-    <div class="mb-4 px-3 mt-2">
-        <h4 class="text-white fw-bold mb-0">Σfectiva</h4>
-        <span class="text-info small fw-bold tracking-wide">CORE BANCARIO</span>
-    </div>
-
-    <ul class="nav flex-column mb-auto">
-        <li class="nav-item">
-            <a href="admin_bandeja.html" class="nav-link">
-                <i class="bi bi-inbox me-2"></i> Bandeja de Evaluación
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="admin_reportes.html" class="nav-link active">
-                <i class="bi bi-bar-chart me-2"></i> Reportes Internos
-            </a>
-        </li>
-    </ul>
-    <div class="mt-auto">
-        <div class="px-3 mb-3 text-white-50 small">Usuario: Gerencia Operativa</div>
-        <a href="index.html" class="nav-link text-danger">
-            <i class="bi bi-box-arrow-left me-2"></i> Salir del sistema
-        </a>
-    </div>
+<div class="sidebar">
+    <div class="logo">Σfectiva</div>
+    <div class="rol">📊 Panel Gerencial</div>
+    <a href="admin_bandeja.html">📋 Bandeja Asesor</a>
+    <a href="admin_reportes.html" class="active">📊 Reportes Gerenciales</a>
+    <hr style="border-color:rgba(255,255,255,0.2); margin: 1rem 0;">
+    <a href="login.html" id="btn-cerrar">🚪 Cerrar Sesión</a>
 </div>
 
 <div class="main-content">
-    <header class="mb-4 d-flex justify-content-between align-items-center">
+
+    <div class="top-bar d-flex justify-content-between align-items-center">
         <div>
-            <h4 class="fw-bold mb-1 text-dark">Reportes y Estadísticas</h4>
-            <p class="text-muted small mb-0">Monitoreo en tiempo real de la cartera y colocaciones.</p>
+            <strong>Reportes Gerenciales</strong>
+            <div class="text-muted small">Indicadores estratégicos de Financiera Efectiva — Agencia Huancayo</div>
         </div>
-        <div class="bg-white px-3 py-2 rounded-3 shadow-sm border text-muted fw-medium">
-            <i class="bi bi-calendar3 me-2"></i> 14 de Mayo, 2026
-        </div>
-    </header>
+        <button class="btn btn-sm" style="background:#1a3fbf; color:white; border-radius:8px"
+                onclick="cargarReportes()">🔄 Actualizar</button>
+    </div>
 
-    <div class="row mb-4 g-4">
-        <div class="col-md-4">
-            <div class="card kpi-card border-green border-0 border-start shadow-sm h-100 p-4">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-muted fw-medium small text-uppercase tracking-wide">Desembolsos Hoy</span>
-                    <i class="bi bi-cash-coin fs-4 text-success"></i>
-                </div>
-                <h2 class="fw-bold text-dark mb-1">S/ 45,500.00</h2>
-                <span class="badge bg-success-subtle text-success rounded-pill mt-2 d-inline-block" style="width: fit-content;">+12% vs. ayer</span>
-                <p class="text-muted small mt-2 mb-0">Total de 14 operaciones exitosas.</p>
+    <!-- KPIs principales -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="kpi-card azul">
+                <div class="kpi-label">Total Colocado</div>
+                <div class="kpi-valor" id="kpi-total-colocado">S/ --</div>
+                <div class="kpi-sub" id="kpi-total-solicitudes">-- solicitudes</div>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card kpi-card border-blue border-0 border-start shadow-sm h-100 p-4">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-muted fw-medium small text-uppercase tracking-wide">Cartera Activa</span>
-                    <i class="bi bi-briefcase fs-4 text-primary"></i>
-                </div>
-                <h2 class="fw-bold text-dark mb-1">S/ 2.4M</h2>
-                <span class="badge bg-primary-subtle text-primary rounded-pill mt-2 d-inline-block" style="width: fit-content;">Estable</span>
-                <p class="text-muted small mt-2 mb-0">Capital prestado pendiente de cobro.</p>
+        <div class="col-md-3">
+            <div class="kpi-card verde">
+                <div class="kpi-label">Tasa de Aprobación</div>
+                <div class="kpi-valor" id="kpi-tasa-aprobacion">--%</div>
+                <div class="kpi-sub" id="kpi-aprobados-detalle">-- aprobados</div>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card kpi-card border-cyan border-0 border-start shadow-sm h-100 p-4">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-muted fw-medium small text-uppercase tracking-wide">Solicitudes en Cola</span>
-                    <i class="bi bi-hourglass-split fs-4" style="color: var(--efectiva-cyan);"></i>
-                </div>
-                <h2 class="fw-bold text-dark mb-1">28</h2>
-                <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill mt-2 d-inline-block" style="width: fit-content;">Atención requerida</span>
-                <p class="text-muted small mt-2 mb-0">En evaluación por los analistas.</p>
+        <div class="col-md-3">
+            <div class="kpi-card rojo">
+                <div class="kpi-label">Cartera en Mora</div>
+                <div class="kpi-valor" id="kpi-mora">S/ --</div>
+                <div class="kpi-sub" id="kpi-mora-detalle">-- clientes con atraso</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="kpi-card amarillo">
+                <div class="kpi-label">Monto Promedio</div>
+                <div class="kpi-valor" id="kpi-promedio">S/ --</div>
+                <div class="kpi-sub">Por solicitud aprobada</div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold text-dark mb-0">Detalle de Desembolsos (Día actual)</h5>
-                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-download me-1"></i> Exportar CSV</button>
+    <div class="row g-3 mb-4">
+
+        <!-- Distribución por estado -->
+        <div class="col-md-6">
+            <div class="card-reporte">
+                <h6 class="fw-bold mb-3">📊 Distribución de Solicitudes por Estado</h6>
+                <div id="grafico-estados"></div>
+            </div>
+        </div>
+
+        <!-- Distribución por propósito -->
+        <div class="col-md-6">
+            <div class="card-reporte">
+                <h6 class="fw-bold mb-3">🎯 Solicitudes por Propósito</h6>
+                <div id="grafico-propositos"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de cartera en mora -->
+    <div class="card-reporte mb-4">
+        <h6 class="fw-bold mb-3">⚠️ Cartera en Riesgo — Clasificación SBS</h6>
+        <div class="row g-3 mb-3">
+            <div class="col-md-3">
+                <div class="text-center p-2 rounded" style="background:#d4edda">
+                    <div class="fw-bold" id="cnt-normal">-</div>
+                    <div class="small text-muted">Normal (0-8 días)</div>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                            <tr>
-                                <th class="text-muted fw-medium py-3 px-4">Hora</th>
-                                <th class="text-muted fw-medium py-3">ID Operación</th>
-                                <th class="text-muted fw-medium py-3">Cliente</th>
-                                <th class="text-muted fw-medium py-3">Tipo de Crédito</th>
-                                <th class="text-muted fw-medium py-3 text-end px-4">Monto Desembolsado</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="px-4 text-muted small">09:15 AM</td>
-                                <td class="fw-medium text-dark">OP-5582</td>
-                                <td>Ana Quispe</td>
-                                <td>Préstamo Personal</td>
-                                <td class="text-end fw-bold text-success px-4">S/ 3,000.00</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 text-muted small">10:45 AM</td>
-                                <td class="fw-medium text-dark">OP-5583</td>
-                                <td>Miguel Torres</td>
-                                <td>Efectivo Altoque</td>
-                                <td class="text-end fw-bold text-success px-4">S/ 1,500.00</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 text-muted small">11:30 AM</td>
-                                <td class="fw-medium text-dark">OP-5584</td>
-                                <td>Roberto Sánchez</td>
-                                <td>Crédito Vehicular</td>
-                                <td class="text-end fw-bold text-success px-4">S/ 35,000.00</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 text-muted small">02:20 PM</td>
-                                <td class="fw-medium text-dark">OP-5585</td>
-                                <td>Diana Mendoza</td>
-                                <td>Préstamo Personal</td>
-                                <td class="text-end fw-bold text-success px-4">S/ 6,000.00</td>
-                            </tr>
-                            </tbody>
-                            <tfoot class="table-light">
-                            <tr>
-                                <td colspan="4" class="text-end fw-bold py-3">TOTAL DESEMBOLSADO HOY:</td>
-                                <td class="text-end fw-bold fs-5 text-success px-4">S/ 45,500.00</td>
-                            </tr>
-                            </tfoot>
-                        </table>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center p-2 rounded" style="background:#fff3cd">
+                    <div class="fw-bold" id="cnt-cpp">-</div>
+                    <div class="small text-muted">CPP (9-30 días)</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center p-2 rounded" style="background:#f8d7da">
+                    <div class="fw-bold" id="cnt-deficiente">-</div>
+                    <div class="small text-muted">Deficiente (31-60 días)</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center p-2 rounded" style="background:#f5c6cb">
+                    <div class="fw-bold" id="cnt-dudoso">-</div>
+                    <div class="small text-muted">Dudoso (+60 días)</div>
+                </div>
+            </div>
+        </div>
+        <table class="table tabla-mora">
+            <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Monto</th>
+                <th>Saldo Capital</th>
+                <th>Días Atraso</th>
+                <th>Clasificación</th>
+                <th>Scoring</th>
+            </tr>
+            </thead>
+            <tbody id="tabla-mora-body">
+            <tr><td colspan="6" class="text-center text-muted py-3">Cargando...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Resumen ejecutivo -->
+    <div class="card-reporte">
+        <h6 class="fw-bold mb-3">📈 Resumen Ejecutivo — Indicadores Clave</h6>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="p-3 rounded" style="background:#f8f9fa">
+                    <div class="small text-muted mb-1">Score promedio de cartera</div>
+                    <div class="fw-bold fs-4" id="score-promedio">--</div>
+                    <div class="barra-container mt-2">
+                        <div class="barra-fill" id="barra-score" style="background:#1a3fbf; width:0%"></div>
                     </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="p-3 rounded" style="background:#f8f9fa">
+                    <div class="small text-muted mb-1">Ingreso promedio de clientes</div>
+                    <div class="fw-bold fs-4" id="ingreso-promedio">S/ --</div>
+                    <div class="small text-muted mt-1">Campo clave para capacidad de pago</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 rounded" style="background:#f8f9fa">
+                    <div class="small text-muted mb-1">Solicitudes rechazadas</div>
+                    <div class="fw-bold fs-4" id="kpi-rechazados">--</div>
+                    <div class="small text-muted mt-1">Por score insuficiente o deuda SBS</div>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById('btn-cerrar').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = 'login.html';
+    });
+
+    async function cargarReportes() {
+        try {
+            const response = await fetch('http://localhost:8080/api/prestamos/todas');
+            const result = await response.json();
+
+            if (!result.success) return;
+            const solicitudes = result.solicitudes;
+
+            // ── KPIs principales ──
+            const aprobados = solicitudes.filter(s =>
+                s.estado.includes('APROBADO') || s.estado === 'DESEMBOLSADO');
+            const rechazados = solicitudes.filter(s => s.estado === 'RECHAZADO');
+            const pendientes = solicitudes.filter(s =>
+                s.estado === 'PENDIENTE' || s.estado === 'EN_REVISION');
+            const enMora    = solicitudes.filter(s => s.diasAtraso > 0);
+
+            const totalColocado = aprobados.reduce((sum, s) =>
+                sum + parseFloat(s.monto || 0), 0);
+            const montoMora = enMora.reduce((sum, s) =>
+                sum + parseFloat(s.saldoCapital || 0), 0);
+            const tasaAprobacion = solicitudes.length > 0
+                ? ((aprobados.length / solicitudes.length) * 100).toFixed(1) : 0;
+            const montoPromedio = aprobados.length > 0
+                ? totalColocado / aprobados.length : 0;
+
+            document.getElementById('kpi-total-colocado').textContent =
+                'S/ ' + totalColocado.toLocaleString('es-PE', {minimumFractionDigits:2});
+            document.getElementById('kpi-total-solicitudes').textContent =
+                solicitudes.length + ' solicitudes totales';
+            document.getElementById('kpi-tasa-aprobacion').textContent =
+                tasaAprobacion + '%';
+            document.getElementById('kpi-aprobados-detalle').textContent =
+                aprobados.length + ' aprobados de ' + solicitudes.length;
+            document.getElementById('kpi-mora').textContent =
+                'S/ ' + montoMora.toLocaleString('es-PE', {minimumFractionDigits:2});
+            document.getElementById('kpi-mora-detalle').textContent =
+                enMora.length + ' clientes con atraso';
+            document.getElementById('kpi-promedio').textContent =
+                'S/ ' + montoPromedio.toLocaleString('es-PE', {minimumFractionDigits:2});
+            document.getElementById('kpi-rechazados').textContent = rechazados.length;
+
+            // ── Gráfico de estados ──
+            const estados = {};
+            solicitudes.forEach(s => {
+                const e = s.estado.replace(/_/g,' ');
+                estados[e] = (estados[e] || 0) + 1;
+            });
+            const colores = {
+                'APROBADO PROVISIONAL': '#28a745',
+                'DESEMBOLSADO':         '#1a3fbf',
+                'PENDIENTE':            '#ffc107',
+                'EN REVISION':          '#17a2b8',
+                'RECHAZADO':            '#dc3545'
+            };
+            const maxEstado = Math.max(...Object.values(estados));
+            document.getElementById('grafico-estados').innerHTML =
+                Object.entries(estados).map(([estado, cnt]) => `
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <div style="width:130px; font-size:0.8rem; text-align:right; color:#6c757d">${estado}</div>
+                        <div style="flex:1; background:#e9ecef; border-radius:4px; height:24px; overflow:hidden">
+                            <div style="width:${(cnt/maxEstado*100)}%; background:${colores[estado]||'#6c757d'};
+                                 height:100%; border-radius:4px; display:flex; align-items:center;
+                                 padding-left:8px; color:white; font-size:0.75rem; font-weight:600">
+                                ${cnt}
+                            </div>
+                        </div>
+                        <div style="width:30px; font-size:0.8rem; color:#6c757d">${cnt}</div>
+                    </div>`).join('');
+
+            // ── Gráfico de propósitos ──
+            const propositos = {};
+            solicitudes.forEach(s => {
+                if (s.proposito) propositos[s.proposito] = (propositos[s.proposito] || 0) + 1;
+            });
+            const maxProp = Math.max(...Object.values(propositos));
+            document.getElementById('grafico-propositos').innerHTML =
+                Object.entries(propositos)
+                    .sort((a,b) => b[1]-a[1])
+                    .map(([prop, cnt]) => `
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <div style="width:130px; font-size:0.8rem; text-align:right; color:#6c757d">${prop}</div>
+                        <div style="flex:1; background:#e9ecef; border-radius:4px; height:24px; overflow:hidden">
+                            <div style="width:${(cnt/maxProp*100)}%; background:#1a3fbf;
+                                 height:100%; border-radius:4px; display:flex; align-items:center;
+                                 padding-left:8px; color:white; font-size:0.75rem; font-weight:600">
+                                ${cnt}
+                            </div>
+                        </div>
+                        <div style="width:30px; font-size:0.8rem; color:#6c757d">${cnt}</div>
+                    </div>`).join('');
+
+            // ── Clasificación SBS ──
+            const normal     = solicitudes.filter(s => (s.diasAtraso||0) <= 8).length;
+            const cpp        = solicitudes.filter(s => (s.diasAtraso||0) > 8  && (s.diasAtraso||0) <= 30).length;
+            const deficiente = solicitudes.filter(s => (s.diasAtraso||0) > 30 && (s.diasAtraso||0) <= 60).length;
+            const dudoso     = solicitudes.filter(s => (s.diasAtraso||0) > 60).length;
+
+            document.getElementById('cnt-normal').textContent     = normal;
+            document.getElementById('cnt-cpp').textContent        = cpp;
+            document.getElementById('cnt-deficiente').textContent = deficiente;
+            document.getElementById('cnt-dudoso').textContent     = dudoso;
+
+            // ── Tabla de mora ──
+            const conAtraso = solicitudes.filter(s => (s.diasAtraso||0) > 0);
+            if (conAtraso.length === 0) {
+                document.getElementById('tabla-mora-body').innerHTML =
+                    '<tr><td colspan="6" class="text-center text-muted py-3">✅ Sin clientes en mora</td></tr>';
+            } else {
+                document.getElementById('tabla-mora-body').innerHTML =
+                    conAtraso.map(s => {
+                        const dias = s.diasAtraso || 0;
+                        let clase = 'normal', texto = 'Normal';
+                        if (dias > 60)      { clase = 'deficiente'; texto = 'Dudoso'; }
+                        else if (dias > 30) { clase = 'deficiente'; texto = 'Deficiente'; }
+                        else if (dias > 8)  { clase = 'cpp';        texto = 'CPP'; }
+                        return `<tr>
+                            <td>${s.usuarioId?.toString().substring(0,8)}...</td>
+                            <td>S/ ${parseFloat(s.monto).toLocaleString('es-PE',{minimumFractionDigits:2})}</td>
+                            <td>S/ ${s.saldoCapital ? parseFloat(s.saldoCapital).toLocaleString('es-PE',{minimumFractionDigits:2}) : '--'}</td>
+                            <td><span class="text-danger fw-bold">${dias} días</span></td>
+                            <td><span class="badge-clasificacion ${clase}">${texto}</span></td>
+                            <td>${s.puntajeScoring || '--'}/100</td>
+                        </tr>`;
+                    }).join('');
+            }
+
+            // ── Score e ingreso promedio ──
+            const scores = solicitudes.filter(s => s.puntajeScoring).map(s => s.puntajeScoring);
+            const scorePromedio = scores.length > 0
+                ? Math.round(scores.reduce((a,b) => a+b, 0) / scores.length) : 0;
+            document.getElementById('score-promedio').textContent = scorePromedio + '/100';
+            document.getElementById('barra-score').style.width = scorePromedio + '%';
+
+            const ingresos = solicitudes.filter(s => s.ingresoMensual).map(s => parseFloat(s.ingresoMensual));
+            const ingresoPromedio = ingresos.length > 0
+                ? ingresos.reduce((a,b) => a+b, 0) / ingresos.length : 0;
+            document.getElementById('ingreso-promedio').textContent =
+                'S/ ' + ingresoPromedio.toLocaleString('es-PE', {minimumFractionDigits:2});
+
+        } catch (error) {
+            console.error('Error cargando reportes:', error);
+        }
+    }
+
+    cargarReportes();
+</script>
 </body>
 </html>

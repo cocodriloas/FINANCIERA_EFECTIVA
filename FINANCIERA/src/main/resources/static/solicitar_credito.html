@@ -6,131 +6,370 @@
     <title>Solicitar Préstamo - Financiera Efectiva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/styles.css">
     <style>
-        body { background-color: #f4f5f0; }
+        :root { --efectiva-blue: #1a3fbf; }
+        body { background: #f0f4ff; font-family: 'Inter', sans-serif; }
         .sidebar {
-            min-height: 100vh;
-            background-color: var(--efectiva-dark-blue);
-            width: 260px;
-            position: fixed;
-            top: 0; left: 0; z-index: 100;
+            background: var(--efectiva-blue); min-height: 100vh;
+            width: 240px; position: fixed; top: 0; left: 0;
+            padding: 2rem 1rem; color: white;
         }
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 500; padding: 0.8rem 1.5rem; border-radius: 8px;
+        .sidebar .logo { font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; }
+        .sidebar a {
+            display: block; color: rgba(255,255,255,0.8);
+            text-decoration: none; padding: 0.6rem 1rem;
+            border-radius: 8px; margin-bottom: 0.3rem; font-size: 0.9rem;
         }
-        .sidebar .nav-link.active { color: #fff; background-color: rgba(255, 255, 255, 0.1); }
-        .main-content { margin-left: 260px; padding: 2rem; }
-
-        .stepper-item { flex: 1; text-align: center; position: relative; }
-        .stepper-item::after {
-            content: ""; position: absolute; background: #dee2e6;
-            height: 2px; width: 100%; top: 20px; left: 50%; z-index: -1;
+        .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.15); color: white; }
+        .main-content { margin-left: 240px; padding: 2rem; }
+        .card-form { background: white; border-radius: 16px; padding: 2rem; }
+        .simulador {
+            background: linear-gradient(135deg, var(--efectiva-blue), #2d5be3);
+            color: white; border-radius: 16px; padding: 1.5rem;
         }
-        .stepper-item:last-child::after { display: none; }
-        .step-counter {
-            width: 40px; height: 40px; background: #dee2e6;
-            border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; margin: 0 auto 10px; font-weight: bold;
-        }
-        .stepper-item.active .step-counter { background: var(--efectiva-blue); color: white; }
+        .range-slider { accent-color: white; width: 100%; }
+        .resultado-item { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 0.8rem; }
+        .badge-estado { padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .aprobado { background: #d4edda; color: #155724; }
+        .revision { background: #fff3cd; color: #856404; }
+        .rechazado { background: #f8d7da; color: #721c24; }
+        #resultado-panel { display: none; }
+        .scoring-detalle { background: #f8f9fa; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+        .scoring-item { display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid #e9ecef; font-size: 0.85rem; }
+        .scoring-item:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
 
-<div class="sidebar p-3 d-flex flex-column">
-    <h3 class="text-white fw-bold mb-4 px-3 mt-2">Σfectiva</h3>
-    <ul class="nav flex-column mb-auto">
-        <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-        <li class="nav-item"><a href="ahorros.html" class="nav-link"><i class="bi bi-wallet2 me-2"></i> Mis Ahorros</a></li>
-        <li class="nav-item"><a href="creditos.html" class="nav-link active"><i class="bi bi-cash-stack me-2"></i> Mis Créditos</a></li>
-        <li class="nav-item"><a href="transferencias.html" class="nav-link"><i class="bi bi-arrow-left-right me-2"></i> Transferencias</a></li>
-        <li class="nav-item"><a href="perfil.html" class="nav-link"><i class="bi bi-person me-2"></i> Mi Perfil</a></li>
-    </ul>
-    <div class="mt-auto"><a href="index.html" class="nav-link text-danger"><i class="bi bi-box-arrow-left me-2"></i> Cerrar Sesión</a></div>
+<div class="sidebar">
+    <div class="logo">Σfectiva</div>
+    <a href="dashboard.html">🏠 Inicio</a>
+    <a href="ahorros.html">💰 Mis Ahorros</a>
+    <a href="creditos.html">📋 Mis Créditos</a>
+    <a href="solicitar_credito.html" class="active">➕ Solicitar Préstamo</a>
+    <a href="transferencias.html">↔️ Transferencias</a>
+    <a href="perfil.html">👤 Mi Perfil</a>
+    <hr style="border-color:rgba(255,255,255,0.2); margin: 1rem 0;">
+    <a href="login.html" id="btn-cerrar">🚪 Cerrar Sesión</a>
 </div>
 
 <div class="main-content">
-    <header class="mb-5 text-center">
-        <h4 class="fw-bold text-dark">Nueva Solicitud de Crédito</h4>
-        <p class="text-muted">Completa los datos para evaluar tu préstamo en minutos.</p>
-    </header>
+    <h4 class="fw-bold mb-4">Solicitar Préstamo Efectivo</h4>
 
-    <div class="d-flex justify-content-between mb-5 px-5">
-        <div class="stepper-item active">
-            <div class="step-counter shadow-sm">1</div>
-            <div class="small fw-bold">Configuración</div>
-        </div>
-        <div class="stepper-item">
-            <div class="step-counter">2</div>
-            <div class="small">Verificación</div>
-        </div>
-        <div class="stepper-item">
-            <div class="step-counter">3</div>
-            <div class="small">Finalizado</div>
-        </div>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
-                <form action="creditos.html" method="GET">
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">¿Qué préstamo necesitas? *</label>
-                            <select class="form-select border-0 bg-light py-2 shadow-sm" required>
-                                <option value="">Selecciona una opción</option>
-                                <option>Préstamo Personal</option>
-                                <option>Crédito vehicular</option>
-                                <option>Crédito Hipotecario</option>
-                                <option>Efectivo Altoque</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Monto solicitado (S/) *</label>
-                            <input type="number" class="form-control border-0 bg-light py-2 shadow-sm" placeholder="Ej: 5000" min="500" required>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Plazo (Meses) *</label>
-                            <select class="form-select border-0 bg-light py-2 shadow-sm" required>
-                                <option>6 meses</option>
-                                <option>12 meses</option>
-                                <option selected>24 meses</option>
-                                <option>36 meses</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">¿Para qué lo usarás? *</label>
-                            <input type="text" class="form-control border-0 bg-light py-2 shadow-sm" placeholder="Ej: Viajes, Salud, Estudios" required>
-                        </div>
-
-                        <div class="col-12 mt-5">
-                            <div class="bg-primary-subtle p-3 rounded-3 mb-4">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="text-primary fw-bold">Cuota mensual estimada:</span>
-                                    <span class="fs-4 fw-bold text-primary">S/ 245.50 *</span>
-                                </div>
-                                <p class="small text-primary mb-0 mt-1">* Sujeto a evaluación crediticia y TCEA vigente.</p>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow">
-                                Enviar Solicitud a Evaluación
-                            </button>
-                            <div class="text-center mt-3">
-                                <a href="creditos.html" class="text-muted text-decoration-none small">Cancelar y volver</a>
-                            </div>
+    <div class="row g-4">
+        <!-- Simulador izquierda -->
+        <div class="col-md-5">
+            <div class="simulador mb-3">
+                <h6 class="fw-bold mb-3">🧮 Simulador de Préstamo</h6>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <label class="small">Monto a solicitar</label>
+                        <strong id="lbl-monto">S/ 1,000</strong>
+                    </div>
+                    <input type="range" class="range-slider" id="slider-monto"
+                           min="500" max="6000" step="500" value="1000">
+                    <div class="d-flex justify-content-between" style="font-size:0.75rem; opacity:0.7">
+                        <span>S/ 500</span><span>S/ 6,000</span>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-1">
+                        <label class="small">Plazo de pago</label>
+                        <strong id="lbl-plazo">6 meses</strong>
+                    </div>
+                    <input type="range" class="range-slider" id="slider-plazo"
+                           min="3" max="18" step="3" value="6">
+                    <div class="d-flex justify-content-between" style="font-size:0.75rem; opacity:0.7">
+                        <span>3 meses</span><span>18 meses</span>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="resultado-item text-center">
+                            <div style="font-size:0.75rem; opacity:0.8">Cuota mensual</div>
+                            <div class="fw-bold" id="sim-cuota">S/ --</div>
                         </div>
                     </div>
-                </form>
+                    <div class="col-6">
+                        <div class="resultado-item text-center">
+                            <div style="font-size:0.75rem; opacity:0.8">Total a pagar</div>
+                            <div class="fw-bold" id="sim-total">S/ --</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="resultado-item text-center">
+                            <div style="font-size:0.75rem; opacity:0.8">Tasa mensual</div>
+                            <div class="fw-bold">3.5% TEM (~42% TEA)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información del scoring -->
+            <div class="card-form p-3">
+                <h6 class="fw-bold mb-2" style="font-size:0.85rem">📊 ¿Cómo se evalúa tu solicitud?</h6>
+                <div class="scoring-item"><span>💰 Capacidad de pago</span><span class="text-muted">35 pts</span></div>
+                <div class="scoring-item"><span>⭐ Historial en Efectiva</span><span class="text-muted">25 pts</span></div>
+                <div class="scoring-item"><span>💼 Estabilidad laboral</span><span class="text-muted">20 pts</span></div>
+                <div class="scoring-item"><span>🏠 Verificación domicilio</span><span class="text-muted">10 pts</span></div>
+                <div class="scoring-item"><span>🏦 Central de riesgos SBS</span><span class="text-muted">10 pts</span></div>
+                <div class="mt-2 small text-muted">
+                    ≥70 pts: Aprobado · 40-69: Comité · &lt;40: Rechazado
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario derecha -->
+        <div class="col-md-7">
+            <div class="card-form">
+                <h6 class="fw-bold mb-3">📋 Datos de la Solicitud</h6>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Propósito del préstamo *</label>
+                    <select class="form-select" id="proposito">
+                        <option value="">Selecciona un motivo...</option>
+                        <option value="Negocio">💼 Negocio / Emprendimiento</option>
+                        <option value="Electrodoméstico">📺 Electrodoméstico</option>
+                        <option value="Educación">📚 Educación</option>
+                        <option value="Salud">🏥 Salud / Emergencia médica</option>
+                        <option value="Hogar">🏠 Mejoras del hogar</option>
+                        <option value="Moto">🏍️ Moto / Vehículo</option>
+                        <option value="Otro">📦 Otro</option>
+                    </select>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <label class="form-label small fw-semibold">Monto solicitado</label>
+                        <div class="input-group">
+                            <span class="input-group-text">S/</span>
+                            <input type="number" class="form-control" id="monto-input" value="1000" readonly>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-semibold">Plazo</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="plazo-input" value="6" readonly>
+                            <span class="input-group-text">meses</span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-3">
+                <h6 class="fw-bold mb-3 small" style="color:#1a3fbf">
+                    📝 Información para evaluación crediticia
+                </h6>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Ingreso mensual aproximado *</label>
+                    <div class="input-group">
+                        <span class="input-group-text">S/</span>
+                        <input type="number" class="form-control" id="ingreso-mensual"
+                               placeholder="Ej: 1200" min="0">
+                    </div>
+                    <div class="form-text small" id="alerta-capacidad"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Situación laboral *</label>
+                    <select class="form-select" id="situacion-laboral">
+                        <option value="DEPENDIENTE">👔 Trabajador dependiente (en planilla)</option>
+                        <option value="INDEPENDIENTE">🛒 Trabajador independiente / informal</option>
+                        <option value="AMA_CASA">🏠 Ama de casa</option>
+                        <option value="PENSIONISTA">👴 Pensionista / jubilado</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">¿Cuántos meses lleva trabajando? *</label>
+                    <input type="number" class="form-control" id="meses-trabajo"
+                           placeholder="Ej: 12" min="0" max="600">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">¿Es cliente de Financiera Efectiva?</label>
+                    <select class="form-select" id="historial-efectiva">
+                        <option value="false">No, es mi primera vez</option>
+                        <option value="true">Sí, ya tuve un crédito antes</option>
+                    </select>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <label class="form-label small fw-semibold">¿Tiene recibo de servicios?</label>
+                        <select class="form-select" id="recibo-servicios">
+                            <option value="true">Sí tengo</option>
+                            <option value="false">No tengo</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-semibold">¿Tiene deuda en SBS/Infocorp?</label>
+                        <select class="form-select" id="deuda-sbs">
+                            <option value="false">No tengo</option>
+                            <option value="true">Sí tengo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="alert alert-info py-2 small mb-3">
+                    💡 <strong>Cuota estimada: <span id="cuota-form">S/ --</span></strong>
+                    — Tasa: 3.5% mensual (~42% TEA). Sujeto a evaluación.
+                </div>
+
+                <!-- Panel resultado -->
+                <div id="resultado-panel" class="mb-3">
+                    <div class="text-center p-3 rounded-3" id="resultado-box">
+                        <div style="font-size:2.5rem" id="resultado-icon">⏳</div>
+                        <div class="fw-bold fs-5 mt-2" id="resultado-titulo"></div>
+                        <div class="small mt-1" id="resultado-mensaje"></div>
+                        <div class="mt-2"><span class="badge-estado" id="resultado-badge"></span></div>
+                        <div class="mt-3 row g-2" id="resultado-detalle"></div>
+                    </div>
+                </div>
+
+                <button id="btn-solicitar" class="btn w-100 fw-bold py-2"
+                        style="background:#1a3fbf; color:white; border-radius:10px">
+                    Enviar Solicitud
+                </button>
+                <div class="text-center mt-2">
+                    <a href="dashboard.html" class="text-muted small">← Volver al dashboard</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    if (!usuario || !usuario.id) window.location.href = 'login.html';
+
+    document.getElementById('btn-cerrar').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('usuario');
+        window.location.href = 'login.html';
+    });
+
+    function calcularCuota(monto, meses) {
+        const tasa = 0.035;
+        const cuota = monto * (tasa * Math.pow(1+tasa, meses)) / (Math.pow(1+tasa, meses) - 1);
+        return cuota.toFixed(2);
+    }
+
+    function actualizarSimulador() {
+        const monto = parseInt(document.getElementById('slider-monto').value);
+        const plazo = parseInt(document.getElementById('slider-plazo').value);
+        const cuota = calcularCuota(monto, plazo);
+        const total = (cuota * plazo).toFixed(2);
+
+        document.getElementById('lbl-monto').textContent = `S/ ${monto.toLocaleString()}`;
+        document.getElementById('lbl-plazo').textContent = `${plazo} meses`;
+        document.getElementById('sim-cuota').textContent = `S/ ${parseFloat(cuota).toLocaleString()}`;
+        document.getElementById('sim-total').textContent = `S/ ${parseFloat(total).toLocaleString()}`;
+        document.getElementById('monto-input').value = monto;
+        document.getElementById('plazo-input').value = plazo;
+        document.getElementById('cuota-form').textContent = `S/ ${parseFloat(cuota).toLocaleString()}`;
+
+        // Alerta de capacidad de pago
+        const ingreso = parseFloat(document.getElementById('ingreso-mensual').value) || 0;
+        if (ingreso > 0) {
+            const ratio = cuota / ingreso;
+            const alerta = document.getElementById('alerta-capacidad');
+            if (ratio <= 0.30) {
+                alerta.innerHTML = `<span class="text-success">✅ Cuota representa el ${(ratio*100).toFixed(1)}% de tu ingreso (dentro del límite)</span>`;
+            } else {
+                alerta.innerHTML = `<span class="text-danger">⚠️ Cuota representa el ${(ratio*100).toFixed(1)}% de tu ingreso (supera el 30% permitido)</span>`;
+            }
+        }
+    }
+
+    document.getElementById('slider-monto').addEventListener('input', actualizarSimulador);
+    document.getElementById('slider-plazo').addEventListener('input', actualizarSimulador);
+    document.getElementById('ingreso-mensual').addEventListener('input', actualizarSimulador);
+    actualizarSimulador();
+
+    document.getElementById('btn-solicitar').addEventListener('click', async () => {
+        const proposito = document.getElementById('proposito').value;
+        const monto = parseInt(document.getElementById('monto-input').value);
+        const plazo = parseInt(document.getElementById('plazo-input').value);
+        const ingreso = parseFloat(document.getElementById('ingreso-mensual').value);
+        const mesesTrabajo = parseInt(document.getElementById('meses-trabajo').value) || 0;
+        const historial = document.getElementById('historial-efectiva').value === 'true';
+        const recibo = document.getElementById('recibo-servicios').value === 'true';
+        const deudaSbs = document.getElementById('deuda-sbs').value === 'true';
+
+        if (!proposito) { alert('Por favor selecciona el propósito.'); return; }
+        if (!ingreso || ingreso <= 0) { alert('Por favor ingresa tu ingreso mensual.'); return; }
+
+        const btn = document.getElementById('btn-solicitar');
+        btn.textContent = 'Evaluando...';
+        btn.disabled = true;
+
+        try {
+            const response = await fetch('http://localhost:8080/api/prestamos/solicitar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    usuarioId: usuario.id,
+                    monto, plazoMeses: plazo, proposito,
+                    ingresoMensual: ingreso,
+                    mesesTrabajo,
+                    tieneHistorialEfectiva: historial,
+                    tieneReciboServicios: recibo,
+                    tieneDeudaSbs: deudaSbs
+                })
+            });
+
+            const result = await response.json();
+            const panel = document.getElementById('resultado-panel');
+            const box = document.getElementById('resultado-box');
+            panel.style.display = 'block';
+
+            if (result.success) {
+                const configs = {
+                    'APROBADO_PROVISIONAL': { icon:'🎉', titulo:'¡Pre-aprobado!', color:'#d4edda', badgeClass:'aprobado' },
+                    'EN_REVISION':          { icon:'🔍', titulo:'En Comité',      color:'#fff3cd', badgeClass:'revision' },
+                    'RECHAZADO':            { icon:'❌', titulo:'No Aprobado',    color:'#f8d7da', badgeClass:'rechazado' }
+                };
+                const cfg = configs[result.estado] || configs['EN_REVISION'];
+                box.style.background = cfg.color;
+                document.getElementById('resultado-icon').textContent = cfg.icon;
+                document.getElementById('resultado-titulo').textContent = cfg.titulo;
+                document.getElementById('resultado-mensaje').textContent = result.mensaje;
+                document.getElementById('resultado-badge').textContent = result.estado.replace(/_/g,' ');
+                document.getElementById('resultado-badge').className = `badge-estado ${cfg.badgeClass}`;
+                document.getElementById('resultado-detalle').innerHTML = `
+                    <div class="col-3"><div class="bg-white rounded p-2 text-center">
+                        <div class="small text-muted">Monto</div>
+                        <div class="fw-bold small">S/ ${result.monto?.toLocaleString()}</div>
+                    </div></div>
+                    <div class="col-3"><div class="bg-white rounded p-2 text-center">
+                        <div class="small text-muted">Cuota</div>
+                        <div class="fw-bold small">S/ ${parseFloat(result.cuotaMensual).toLocaleString()}</div>
+                    </div></div>
+                    <div class="col-3"><div class="bg-white rounded p-2 text-center">
+                        <div class="small text-muted">Scoring</div>
+                        <div class="fw-bold small">${result.scoring}/100</div>
+                    </div></div>
+                    <div class="col-3"><div class="bg-white rounded p-2 text-center">
+                        <div class="small text-muted">Plazo</div>
+                        <div class="fw-bold small">${result.plazoMeses} meses</div>
+                    </div></div>`;
+            } else {
+                box.style.background = '#f8d7da';
+                document.getElementById('resultado-icon').textContent = '⚠️';
+                document.getElementById('resultado-titulo').textContent = 'No Permitido';
+                document.getElementById('resultado-mensaje').textContent = result.message;
+                document.getElementById('resultado-badge').textContent = 'BLOQUEADO';
+                document.getElementById('resultado-badge').className = 'badge-estado rechazado';
+                document.getElementById('resultado-detalle').innerHTML = '';
+            }
+        } catch (error) {
+            alert('Error conectando con el servidor.');
+        } finally {
+            btn.textContent = 'Enviar Solicitud';
+            btn.disabled = false;
+        }
+    });
+</script>
 </body>
 </html>

@@ -6,178 +6,224 @@
     <title>Mi Perfil - Financiera Efectiva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/styles.css">
     <style>
-        body { background-color: #f4f5f0; }
-
-        /* Estilos del Sidebar */
+        :root { --efectiva-blue: #1a3fbf; }
+        body { background: #f0f4ff; font-family: 'Inter', sans-serif; }
         .sidebar {
-            min-height: 100vh;
-            background-color: var(--efectiva-dark-blue);
-            width: 260px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 100;
+            background: var(--efectiva-blue); min-height: 100vh;
+            width: 240px; position: fixed; top: 0; left: 0;
+            padding: 2rem 1rem; color: white;
         }
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 500;
-            padding: 0.8rem 1.5rem;
-            margin-bottom: 0.2rem;
-            border-radius: 8px;
+        .sidebar .logo { font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; }
+        .sidebar a {
+            display: block; color: rgba(255,255,255,0.8);
+            text-decoration: none; padding: 0.6rem 1rem;
+            border-radius: 8px; margin-bottom: 0.3rem; font-size: 0.9rem;
         }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.1);
+        .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.15); color: white; }
+        .main-content { margin-left: 240px; padding: 2rem; }
+        .card-perfil { background: white; border-radius: 16px; padding: 2rem; }
+        .avatar {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, #1a3fbf, #2d5be3);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; color: white; margin: 0 auto 1rem;
         }
-
-        .main-content {
-            margin-left: 260px;
-            padding: 2rem;
+        .info-item {
+            display: flex; justify-content: space-between;
+            padding: 0.7rem 0; border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
         }
-
-        .profile-header {
-            background: linear-gradient(135deg, var(--efectiva-blue), var(--efectiva-cyan));
-            border-radius: 1rem;
-            padding: 2.5rem;
-            color: white;
+        .info-item:last-child { border-bottom: none; }
+        .info-label { color: #6c757d; }
+        .info-valor { font-weight: 500; }
+        .badge-nivel {
+            padding: 0.3rem 0.8rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600;
         }
-
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            background-color: white;
-            color: var(--efectiva-blue);
-            font-size: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-weight: bold;
-        }
+        .nivel-bajo { background: #fff3cd; color: #856404; }
+        .nivel-medio { background: #d4edda; color: #155724; }
+        .nivel-alto { background: #cce5ff; color: #004085; }
     </style>
 </head>
 <body>
 
-<div class="sidebar p-3 d-flex flex-column">
-    <h3 class="text-white fw-bold mb-4 px-3 mt-2">Σfectiva</h3>
-    <ul class="nav flex-column mb-auto">
-        <li class="nav-item">
-            <a href="dashboard.html" class="nav-link">
-                <i class="bi bi-house-door me-2"></i> Dashboard
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="ahorros.html" class="nav-link">
-                <i class="bi bi-wallet2 me-2"></i> Mis Ahorros
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="creditos.html" class="nav-link">
-                <i class="bi bi-cash-stack me-2"></i> Mis Créditos
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="transferencias.html" class="nav-link">
-                <i class="bi bi-arrow-left-right me-2"></i> Transferencias
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="perfil.html" class="nav-link active">
-                <i class="bi bi-person me-2"></i> Mi Perfil
-            </a>
-        </li>
-    </ul>
-    <div class="mt-auto">
-        <a href="index.html" class="nav-link text-danger">
-            <i class="bi bi-box-arrow-left me-2"></i> Cerrar Sesión
-        </a>
-    </div>
+<div class="sidebar">
+    <div class="logo">Σfectiva</div>
+    <a href="dashboard.html">🏠 Inicio</a>
+    <a href="ahorros.html">💰 Mis Ahorros</a>
+    <a href="creditos.html">📋 Mis Créditos</a>
+    <a href="solicitar_credito.html">➕ Solicitar Préstamo</a>
+    <a href="transferencias.html">↔️ Transferencias</a>
+    <a href="perfil.html" class="active">👤 Mi Perfil</a>
+    <hr style="border-color:rgba(255,255,255,0.2); margin: 1rem 0;">
+    <a href="login.html" id="btn-cerrar">🚪 Cerrar Sesión</a>
 </div>
 
 <div class="main-content">
-    <header class="mb-4">
-        <h4 class="fw-bold mb-1 text-dark">Mi Perfil</h4>
-        <p class="text-muted small">Gestiona tu información personal y configuración de seguridad.</p>
-    </header>
+    <h4 class="fw-bold mb-4">👤 Mi Perfil</h4>
 
-    <div class="profile-header shadow-sm mb-4 d-flex align-items-center">
-        <div class="profile-avatar me-4 shadow-sm">CR</div>
-        <div>
-            <h3 class="fw-bold mb-1">Carlo Emilio Padilla Rojas</h3>
-            <p class="mb-0 opacity-75">Cliente desde: Marzo 2024</p>
-        </div>
-    </div>
+    <div class="row g-4">
 
-    <div class="row">
-        <div class="col-lg-7 mb-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="fw-bold mb-0 text-dark">Información Personal</h5>
-                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3">Editar datos</button>
+        <!-- Datos personales -->
+        <div class="col-md-6">
+            <div class="card-perfil text-center mb-4">
+                <div class="avatar" id="avatar-inicial">👤</div>
+                <h5 class="fw-bold" id="perfil-nombre">Cargando...</h5>
+                <div class="text-muted small mb-3" id="perfil-correo">--</div>
+                <span class="badge-nivel nivel-medio" id="perfil-nivel">Cliente Efectiva</span>
+            </div>
+
+            <div class="card-perfil">
+                <h6 class="fw-bold mb-3">📋 Datos Personales</h6>
+                <div class="info-item">
+                    <span class="info-label">Tipo de documento</span>
+                    <span class="info-valor" id="perfil-tipo-doc">--</span>
                 </div>
-
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <label class="small text-muted mb-1">Tipo y Nro. de Documento</label>
-                        <p class="fw-medium text-dark">DNI ••••••404</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="small text-muted mb-1">Fecha de Nacimiento</label>
-                        <p class="fw-medium text-dark">12 de Octubre, 1998</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="small text-muted mb-1">Correo Electrónico</label>
-                        <p class="fw-medium text-dark">carlo.padilla@ejemplo.com</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="small text-muted mb-1">Celular</label>
-                        <p class="fw-medium text-dark">+51 987 654 321</p>
-                    </div>
-                    <div class="col-12">
-                        <label class="small text-muted mb-1">Dirección Registrada</label>
-                        <p class="fw-medium text-dark">Av. Real 123, Huancayo - Junín</p>
-                    </div>
+                <div class="info-item">
+                    <span class="info-label">Número de documento</span>
+                    <span class="info-valor" id="perfil-num-doc">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Correo electrónico</span>
+                    <span class="info-valor" id="perfil-correo2">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Distrito</span>
+                    <span class="info-valor" id="perfil-distrito">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Departamento</span>
+                    <span class="info-valor" id="perfil-departamento">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Situación laboral</span>
+                    <span class="info-valor" id="perfil-laboral">--</span>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-5 mb-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-                <h5 class="fw-bold mb-4 text-dark">Seguridad y Acceso</h5>
+        <!-- Datos financieros -->
+        <div class="col-md-6">
+            <div class="card-perfil mb-4">
+                <h6 class="fw-bold mb-3">💳 Mi Cuenta Efectiva</h6>
+                <div class="info-item">
+                    <span class="info-label">Número de cuenta</span>
+                    <span class="info-valor" id="perfil-cuenta">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Tipo de cuenta</span>
+                    <span class="info-valor" id="perfil-tipo-cuenta">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Saldo disponible</span>
+                    <span class="info-valor text-success fw-bold" id="perfil-saldo">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Moneda</span>
+                    <span class="info-valor" id="perfil-moneda">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Estado de cuenta</span>
+                    <span class="info-valor text-success" id="perfil-estado-cuenta">--</span>
+                </div>
+            </div>
 
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item px-0 py-3 border-0 d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="fw-medium text-dark">Contraseña de acceso</div>
-                            <div class="small text-muted">Cambiada hace 3 meses</div>
-                        </div>
-                        <button class="btn btn-light btn-sm rounded-pill border">Cambiar</button>
-                    </div>
-                    <div class="list-group-item px-0 py-3 border-0 d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="fw-medium text-dark">Token Digital</div>
-                            <div class="small text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i>Activo</div>
-                        </div>
-                        <button class="btn btn-light btn-sm rounded-pill border">Gestionar</button>
-                    </div>
-                    <div class="list-group-item px-0 py-3 border-0 d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="fw-medium text-dark">Notificaciones de correo</div>
-                            <div class="small text-muted">Para compras mayores a S/ 50</div>
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" checked>
-                        </div>
-                    </div>
+            <div class="card-perfil">
+                <h6 class="fw-bold mb-3">📊 Resumen Crediticio</h6>
+                <div class="info-item">
+                    <span class="info-label">Total de solicitudes</span>
+                    <span class="info-valor" id="perfil-total-sol">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Créditos aprobados</span>
+                    <span class="info-valor text-success" id="perfil-aprobados">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Créditos rechazados</span>
+                    <span class="info-valor text-danger" id="perfil-rechazados">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Score promedio</span>
+                    <span class="info-valor" id="perfil-score">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Clasificación SBS</span>
+                    <span class="info-valor text-success" id="perfil-sbs">NORMAL</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    if (!usuario || !usuario.id) window.location.href = 'login.html';
+
+    document.getElementById('btn-cerrar').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('usuario');
+        window.location.href = 'login.html';
+    });
+
+    // Datos básicos del usuario
+    document.getElementById('perfil-nombre').textContent = usuario.nombres || '--';
+    document.getElementById('perfil-correo').textContent = usuario.correo || '--';
+    document.getElementById('perfil-correo2').textContent = usuario.correo || '--';
+    document.getElementById('perfil-tipo-doc').textContent = usuario.tipoDocumento || '--';
+    document.getElementById('perfil-num-doc').textContent = usuario.numeroDocumento || '--';
+
+    const inicial = (usuario.nombres || 'U')[0].toUpperCase();
+    document.getElementById('avatar-inicial').textContent = inicial;
+
+    async function cargarPerfil() {
+        try {
+            // Cargar cuenta
+            const resCuenta = await fetch(`http://localhost:8080/api/cuentas/usuario/${usuario.id}`);
+            const dataCuenta = await resCuenta.json();
+            if (dataCuenta.success && dataCuenta.cuentas.length > 0) {
+                const cuenta = dataCuenta.cuentas[0];
+                document.getElementById('perfil-cuenta').textContent = cuenta.numeroCuenta;
+                document.getElementById('perfil-tipo-cuenta').textContent = cuenta.tipoCuenta;
+                document.getElementById('perfil-saldo').textContent =
+                    'S/ ' + parseFloat(cuenta.saldo).toLocaleString('es-PE', {minimumFractionDigits: 2});
+                document.getElementById('perfil-moneda').textContent = cuenta.moneda;
+                document.getElementById('perfil-estado-cuenta').textContent = cuenta.estado;
+            }
+
+            // Cargar solicitudes
+            const resSol = await fetch(`http://localhost:8080/api/prestamos/usuario/${usuario.id}`);
+            const dataSol = await resSol.json();
+            if (dataSol.success) {
+                const sols = dataSol.solicitudes;
+                const aprobados = sols.filter(s => s.estado.includes('APROBADO') || s.estado === 'DESEMBOLSADO');
+                const rechazados = sols.filter(s => s.estado === 'RECHAZADO');
+                const scores = sols.filter(s => s.puntajeScoring).map(s => s.puntajeScoring);
+                const scorePromedio = scores.length > 0
+                    ? Math.round(scores.reduce((a,b) => a+b,0) / scores.length) : 0;
+
+                document.getElementById('perfil-total-sol').textContent = sols.length;
+                document.getElementById('perfil-aprobados').textContent = aprobados.length;
+                document.getElementById('perfil-rechazados').textContent = rechazados.length;
+                document.getElementById('perfil-score').textContent = scorePromedio + '/100';
+
+                // Clasificación SBS basada en días de atraso
+                const maxAtraso = Math.max(...sols.map(s => s.diasAtraso || 0), 0);
+                let clasificacion = 'NORMAL';
+                if (maxAtraso > 60) clasificacion = 'DUDOSO';
+                else if (maxAtraso > 30) clasificacion = 'DEFICIENTE';
+                else if (maxAtraso > 8) clasificacion = 'CPP';
+                document.getElementById('perfil-sbs').textContent = clasificacion;
+                document.getElementById('perfil-sbs').className =
+                    'info-valor ' + (clasificacion === 'NORMAL' ? 'text-success' : 'text-danger');
+            }
+
+        } catch (error) {
+            console.error('Error cargando perfil:', error);
+        }
+    }
+
+    cargarPerfil();
+</script>
 </body>
 </html>
