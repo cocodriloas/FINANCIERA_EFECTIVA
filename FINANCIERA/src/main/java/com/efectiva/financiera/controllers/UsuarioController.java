@@ -3,13 +3,22 @@ package com.efectiva.financiera.controllers;
 import com.efectiva.financiera.dto.LoginRequestDto;
 import com.efectiva.financiera.dto.RegistroRequestDto;
 import com.efectiva.financiera.models.Usuario;
+import com.efectiva.financiera.models.Asesor;
+import com.efectiva.financiera.models.Cuenta;
 import com.efectiva.financiera.services.UsuarioService;
+import com.efectiva.financiera.repositories.UsuarioRepository;
+import com.efectiva.financiera.repositories.AsesorRepository;
+import com.efectiva.financiera.repositories.CuentaRepository;
+import com.efectiva.financiera.security.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -17,18 +26,54 @@ import java.util.Map;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
+    private final AsesorRepository asesorRepository;
+    private final CuentaRepository cuentaRepository;
+    private final JwtUtil jwtUtil;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService,
+                             UsuarioRepository usuarioRepository,
+                             AsesorRepository asesorRepository,
+                             CuentaRepository cuentaRepository,
+                             JwtUtil jwtUtil) {
         this.usuarioService = usuarioService;
+        this.usuarioRepository = usuarioRepository;
+        this.asesorRepository = asesorRepository;
+        this.cuentaRepository = cuentaRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/registro")
     public ResponseEntity<?> registrar(@RequestBody RegistroRequestDto dto) {
         Map<String, Object> response = new HashMap<>();
         try {
+            // 1. Registramos al usuario
             usuarioService.registrarUsuario(dto);
+
+            // 2. Buscamos al usuario recién creado para obtener su ID
+            Optional<Usuario> nuevoUsuario = usuarioRepository.findByCorreo(dto.getCorreo());
+
+            if (nuevoUsuario.isPresent()) {
+                // 3. Le creamos una cuenta de ahorros automáticamente
+                Cuenta nuevaCuenta = new Cuenta();
+                nuevaCuenta.setUsuarioId(nuevoUsuario.get().getId());
+
+                // Generamos un número de cuenta aleatorio
+                Random random = new Random();
+                int numeroAleatorio = 1000000 + random.nextInt(9000000);
+                nuevaCuenta.setNumeroCuenta("193-" + numeroAleatorio);
+
+                // CORRECCIÓN: Nombre más corto para no exceder los 20 caracteres de la BD
+                nuevaCuenta.setTipoCuenta("Ahorro Digital");
+                nuevaCuenta.setMoneda("PEN");
+                nuevaCuenta.setSaldo(BigDecimal.ZERO);
+                nuevaCuenta.setEstado("ACTIVA");
+
+                cuentaRepository.save(nuevaCuenta);
+            }
+
             response.put("success", true);
-            response.put("message", "Usuario registrado correctamente");
+            response.put("message", "Usuario y Cuenta creados correctamente");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             response.put("success", false);
@@ -41,10 +86,48 @@ public class UsuarioController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
         Map<String, Object> response = new HashMap<>();
         try {
-            Usuario usuario = usuarioService.login(dto);
-            response.put("success", true);
-            response.put("data", usuario);
-            return ResponseEntity.ok(response);
+            // 1. Intentar loguear como CLIENTE
+            try {
+                Usuario usuario = usuarioService.login(dto);
+                String token = jwtUtil.generarToken(usuario.getCorreo(), "CLIENTE");
+
+                response.put("success", true);
+                response.put("data", usuario);
+                response.put("tipo", "CLIENTE");
+                response.put("token", token);
+                response.put("redirect", "dashboard.html");
+                return ResponseEntity.ok(response);
+            } catch (RuntimeException e) {
+                if (e.getMessage().equals("Contraseña incorrecta")) {
+                    throw e;
+                }
+            }
+
+            // 2. Intentar loguear como PERSONAL INTERNO
+            Optional<Asesor> asesorOpt = asesorRepository.findByCorreo(dto.getCorreo());
+            if (asesorOpt.isPresent()) {
+                Asesor asesor = asesorOpt.get();
+                if (asesor.getPassword().equals(dto.getPassword())) {
+                    String token = jwtUtil.generarToken(asesor.getCorreo(), asesor.getRol());
+
+                    response.put("success", true);
+                    response.put("data", asesor);
+                    response.put("tipo", asesor.getRol());
+                    response.put("token", token);
+
+                    if (asesor.getRol().equals("GERENTE") || asesor.getRol().equals("ADMINISTRADOR")) {
+                        response.put("redirect", "admin_reportes.html");
+                    } else {
+                        response.put("redirect", "admin_bandeja.html");
+                    }
+                    return ResponseEntity.ok(response);
+                } else {
+                    throw new RuntimeException("Contraseña incorrecta");
+                }
+            }
+
+            throw new RuntimeException("Usuario no encontrado");
+
         } catch (RuntimeException e) {
             response.put("success", false);
             response.put("message", e.getMessage());

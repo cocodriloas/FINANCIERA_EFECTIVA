@@ -6,26 +6,15 @@
     <title>Mi Perfil - Financiera Efectiva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+
     <style>
-        :root { --efectiva-blue: #1a3fbf; }
-        body { background: #f0f4ff; font-family: 'Inter', sans-serif; }
-        .sidebar {
-            background: var(--efectiva-blue); min-height: 100vh;
-            width: 240px; position: fixed; top: 0; left: 0;
-            padding: 2rem 1rem; color: white;
-        }
-        .sidebar .logo { font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; }
-        .sidebar a {
-            display: block; color: rgba(255,255,255,0.8);
-            text-decoration: none; padding: 0.6rem 1rem;
-            border-radius: 8px; margin-bottom: 0.3rem; font-size: 0.9rem;
-        }
-        .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.15); color: white; }
-        .main-content { margin-left: 240px; padding: 2rem; }
-        .card-perfil { background: white; border-radius: 16px; padding: 2rem; }
+        /* ESTILOS ESPECÍFICOS DE MI PERFIL */
+        .card-perfil { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); }
         .avatar {
             width: 80px; height: 80px; border-radius: 50%;
-            background: linear-gradient(135deg, #1a3fbf, #2d5be3);
+            background: linear-gradient(135deg, var(--efectiva-blue), #2d5be3);
             display: flex; align-items: center; justify-content: center;
             font-size: 2rem; color: white; margin: 0 auto 1rem;
         }
@@ -41,9 +30,7 @@
             padding: 0.3rem 0.8rem; border-radius: 20px;
             font-size: 0.8rem; font-weight: 600;
         }
-        .nivel-bajo { background: #fff3cd; color: #856404; }
         .nivel-medio { background: #d4edda; color: #155724; }
-        .nivel-alto { background: #cce5ff; color: #004085; }
     </style>
 </head>
 <body>
@@ -64,8 +51,6 @@
     <h4 class="fw-bold mb-4">👤 Mi Perfil</h4>
 
     <div class="row g-4">
-
-        <!-- Datos personales -->
         <div class="col-md-6">
             <div class="card-perfil text-center mb-4">
                 <div class="avatar" id="avatar-inicial">👤</div>
@@ -76,81 +61,32 @@
 
             <div class="card-perfil">
                 <h6 class="fw-bold mb-3">📋 Datos Personales</h6>
-                <div class="info-item">
-                    <span class="info-label">Tipo de documento</span>
-                    <span class="info-valor" id="perfil-tipo-doc">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Número de documento</span>
-                    <span class="info-valor" id="perfil-num-doc">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Correo electrónico</span>
-                    <span class="info-valor" id="perfil-correo2">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Distrito</span>
-                    <span class="info-valor" id="perfil-distrito">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Departamento</span>
-                    <span class="info-valor" id="perfil-departamento">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Situación laboral</span>
-                    <span class="info-valor" id="perfil-laboral">--</span>
-                </div>
+                <div class="info-item"><span class="info-label">Tipo de documento</span><span class="info-valor" id="perfil-tipo-doc">--</span></div>
+                <div class="info-item"><span class="info-label">Número de documento</span><span class="info-valor" id="perfil-num-doc">--</span></div>
+                <div class="info-item"><span class="info-label">Correo electrónico</span><span class="info-valor" id="perfil-correo2">--</span></div>
+                <div class="info-item"><span class="info-label">Distrito</span><span class="info-valor" id="perfil-distrito">--</span></div>
+                <div class="info-item"><span class="info-label">Departamento</span><span class="info-valor" id="perfil-departamento">--</span></div>
+                <div class="info-item"><span class="info-label">Situación laboral</span><span class="info-valor" id="perfil-laboral">--</span></div>
             </div>
         </div>
 
-        <!-- Datos financieros -->
         <div class="col-md-6">
             <div class="card-perfil mb-4">
                 <h6 class="fw-bold mb-3">💳 Mi Cuenta Efectiva</h6>
-                <div class="info-item">
-                    <span class="info-label">Número de cuenta</span>
-                    <span class="info-valor" id="perfil-cuenta">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Tipo de cuenta</span>
-                    <span class="info-valor" id="perfil-tipo-cuenta">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Saldo disponible</span>
-                    <span class="info-valor text-success fw-bold" id="perfil-saldo">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Moneda</span>
-                    <span class="info-valor" id="perfil-moneda">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Estado de cuenta</span>
-                    <span class="info-valor text-success" id="perfil-estado-cuenta">--</span>
-                </div>
+                <div class="info-item"><span class="info-label">Número de cuenta</span><span class="info-valor" id="perfil-cuenta">--</span></div>
+                <div class="info-item"><span class="info-label">Tipo de cuenta</span><span class="info-valor" id="perfil-tipo-cuenta">--</span></div>
+                <div class="info-item"><span class="info-label">Saldo disponible</span><span class="info-valor text-success fw-bold" id="perfil-saldo">--</span></div>
+                <div class="info-item"><span class="info-label">Moneda</span><span class="info-valor" id="perfil-moneda">--</span></div>
+                <div class="info-item"><span class="info-label">Estado de cuenta</span><span class="info-valor text-success" id="perfil-estado-cuenta">--</span></div>
             </div>
 
             <div class="card-perfil">
                 <h6 class="fw-bold mb-3">📊 Resumen Crediticio</h6>
-                <div class="info-item">
-                    <span class="info-label">Total de solicitudes</span>
-                    <span class="info-valor" id="perfil-total-sol">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Créditos aprobados</span>
-                    <span class="info-valor text-success" id="perfil-aprobados">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Créditos rechazados</span>
-                    <span class="info-valor text-danger" id="perfil-rechazados">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Score promedio</span>
-                    <span class="info-valor" id="perfil-score">--</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Clasificación SBS</span>
-                    <span class="info-valor text-success" id="perfil-sbs">NORMAL</span>
-                </div>
+                <div class="info-item"><span class="info-label">Total de solicitudes</span><span class="info-valor" id="perfil-total-sol">--</span></div>
+                <div class="info-item"><span class="info-label">Créditos aprobados</span><span class="info-valor text-success" id="perfil-aprobados">--</span></div>
+                <div class="info-item"><span class="info-label">Créditos rechazados</span><span class="info-valor text-danger" id="perfil-rechazados">--</span></div>
+                <div class="info-item"><span class="info-label">Score promedio</span><span class="info-valor" id="perfil-score">--</span></div>
+                <div class="info-item"><span class="info-label">Clasificación SBS</span><span class="info-valor text-success" id="perfil-sbs">NORMAL</span></div>
             </div>
         </div>
     </div>
@@ -166,7 +102,6 @@
         window.location.href = 'login.html';
     });
 
-    // Datos básicos del usuario
     document.getElementById('perfil-nombre').textContent = usuario.nombres || '--';
     document.getElementById('perfil-correo').textContent = usuario.correo || '--';
     document.getElementById('perfil-correo2').textContent = usuario.correo || '--';
@@ -178,20 +113,17 @@
 
     async function cargarPerfil() {
         try {
-            // Cargar cuenta
             const resCuenta = await fetch(`http://localhost:8080/api/cuentas/usuario/${usuario.id}`);
             const dataCuenta = await resCuenta.json();
             if (dataCuenta.success && dataCuenta.cuentas.length > 0) {
                 const cuenta = dataCuenta.cuentas[0];
                 document.getElementById('perfil-cuenta').textContent = cuenta.numeroCuenta;
                 document.getElementById('perfil-tipo-cuenta').textContent = cuenta.tipoCuenta;
-                document.getElementById('perfil-saldo').textContent =
-                    'S/ ' + parseFloat(cuenta.saldo).toLocaleString('es-PE', {minimumFractionDigits: 2});
+                document.getElementById('perfil-saldo').textContent = 'S/ ' + parseFloat(cuenta.saldo).toLocaleString('es-PE', {minimumFractionDigits: 2});
                 document.getElementById('perfil-moneda').textContent = cuenta.moneda;
                 document.getElementById('perfil-estado-cuenta').textContent = cuenta.estado;
             }
 
-            // Cargar solicitudes
             const resSol = await fetch(`http://localhost:8080/api/prestamos/usuario/${usuario.id}`);
             const dataSol = await resSol.json();
             if (dataSol.success) {
@@ -199,30 +131,15 @@
                 const aprobados = sols.filter(s => s.estado.includes('APROBADO') || s.estado === 'DESEMBOLSADO');
                 const rechazados = sols.filter(s => s.estado === 'RECHAZADO');
                 const scores = sols.filter(s => s.puntajeScoring).map(s => s.puntajeScoring);
-                const scorePromedio = scores.length > 0
-                    ? Math.round(scores.reduce((a,b) => a+b,0) / scores.length) : 0;
+                const scorePromedio = scores.length > 0 ? Math.round(scores.reduce((a,b) => a+b,0) / scores.length) : 0;
 
                 document.getElementById('perfil-total-sol').textContent = sols.length;
                 document.getElementById('perfil-aprobados').textContent = aprobados.length;
                 document.getElementById('perfil-rechazados').textContent = rechazados.length;
                 document.getElementById('perfil-score').textContent = scorePromedio + '/100';
-
-                // Clasificación SBS basada en días de atraso
-                const maxAtraso = Math.max(...sols.map(s => s.diasAtraso || 0), 0);
-                let clasificacion = 'NORMAL';
-                if (maxAtraso > 60) clasificacion = 'DUDOSO';
-                else if (maxAtraso > 30) clasificacion = 'DEFICIENTE';
-                else if (maxAtraso > 8) clasificacion = 'CPP';
-                document.getElementById('perfil-sbs').textContent = clasificacion;
-                document.getElementById('perfil-sbs').className =
-                    'info-valor ' + (clasificacion === 'NORMAL' ? 'text-success' : 'text-danger');
             }
-
-        } catch (error) {
-            console.error('Error cargando perfil:', error);
-        }
+        } catch (error) { console.error('Error cargando perfil:', error); }
     }
-
     cargarPerfil();
 </script>
 </body>

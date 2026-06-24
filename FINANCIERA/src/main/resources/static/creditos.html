@@ -6,23 +6,10 @@
     <title>Mis Créditos - Financiera Efectiva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+
     <style>
-        :root { --efectiva-blue: #1a3fbf; }
-        body { background: #f0f4ff; font-family: 'Inter', sans-serif; }
-        .sidebar {
-            background: var(--efectiva-blue); min-height: 100vh;
-            width: 240px; position: fixed; top: 0; left: 0;
-            padding: 2rem 1rem; color: white;
-        }
-        .sidebar .logo { font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; }
-        .sidebar a {
-            display: block; color: rgba(255,255,255,0.8);
-            text-decoration: none; padding: 0.6rem 1rem;
-            border-radius: 8px; margin-bottom: 0.3rem; font-size: 0.9rem;
-        }
-        .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.15); color: white; }
-        .main-content { margin-left: 240px; padding: 2rem; }
-        .card-solicitud { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border-left: 5px solid #ccc; }
+        .card-solicitud { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border-left: 5px solid #ccc; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); }
         .card-solicitud.aprobado { border-left-color: #28a745; }
         .card-solicitud.pendiente { border-left-color: #ffc107; }
         .card-solicitud.revision { border-left-color: #17a2b8; }
@@ -32,6 +19,13 @@
         .badge-pendiente { background: #fff3cd; color: #856404; }
         .badge-revision { background: #d1ecf1; color: #0c5460; }
         .badge-rechazado { background: #f8d7da; color: #721c24; }
+
+        /* Estilos para la tabla del cronograma */
+        .table-cronograma th { font-size: 0.85rem; color: #6c757d; font-weight: 600; }
+        .table-cronograma td { font-size: 0.9rem; vertical-align: middle; }
+        .estado-cuota.PENDIENTE { color: #856404; background: #fff3cd; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold;}
+        .estado-cuota.PAGADO { color: #155724; background: #d4edda; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold;}
+        .estado-cuota.ATRASADO { color: #721c24; background: #f8d7da; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold;}
     </style>
 </head>
 <body>
@@ -51,37 +45,36 @@
 <div class="main-content">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="fw-bold mb-0">📋 Mis Créditos y Solicitudes</h4>
-        <a href="solicitar_credito.html" class="btn btn-sm fw-semibold"
-           style="background:#1a3fbf; color:white; border-radius:8px">
+        <a href="solicitar_credito.html" class="btn btn-sm fw-semibold shadow-sm"
+           style="background:var(--efectiva-blue); color:white; border-radius:8px; padding: 0.5rem 1rem;">
             ➕ Nueva Solicitud
         </a>
     </div>
 
-    <!-- Resumen -->
     <div class="row g-3 mb-4" id="resumen-cards">
         <div class="col-md-3">
-            <div class="bg-white rounded-3 p-3 text-center">
+            <div class="bg-white rounded-3 p-3 text-center shadow-sm">
                 <div style="font-size:1.8rem">📄</div>
                 <div class="fw-bold fs-4" id="total-solicitudes">-</div>
                 <div class="text-muted small">Total solicitudes</div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="bg-white rounded-3 p-3 text-center">
+            <div class="bg-white rounded-3 p-3 text-center shadow-sm">
                 <div style="font-size:1.8rem">✅</div>
                 <div class="fw-bold fs-4" id="total-aprobados">-</div>
                 <div class="text-muted small">Aprobados</div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="bg-white rounded-3 p-3 text-center">
+            <div class="bg-white rounded-3 p-3 text-center shadow-sm">
                 <div style="font-size:1.8rem">⏳</div>
                 <div class="fw-bold fs-4" id="total-pendientes">-</div>
                 <div class="text-muted small">Pendientes</div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="bg-white rounded-3 p-3 text-center">
+            <div class="bg-white rounded-3 p-3 text-center shadow-sm">
                 <div style="font-size:1.8rem">❌</div>
                 <div class="fw-bold fs-4" id="total-rechazados">-</div>
                 <div class="text-muted small">Rechazados</div>
@@ -89,15 +82,49 @@
         </div>
     </div>
 
-    <!-- Lista de solicitudes -->
     <div id="lista-solicitudes">
         <div class="text-center py-5 text-muted">
-            <div style="font-size:2rem">⏳</div>
-            <div>Cargando solicitudes...</div>
+            <div class="spinner-border text-primary" role="status"></div>
+            <div class="mt-3">Cargando tu información crediticia...</div>
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="modalCronograma" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 bg-light rounded-top-4">
+                <h5 class="modal-title fw-bold text-dark">📅 Cronograma de Pagos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-cronograma mb-0">
+                        <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">N°</th>
+                            <th>Vencimiento</th>
+                            <th class="text-end">Capital</th>
+                            <th class="text-end">Interés</th>
+                            <th class="text-end fw-bold">Cuota Total</th>
+                            <th class="text-center pe-4">Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody id="body-cronograma">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer border-0 bg-light rounded-bottom-4">
+                <div class="small text-muted w-100 text-center">
+                    *La cuota total incluye Seguro de Desgravamen. Sistema de amortización Francés.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     if (!usuario || !usuario.id) window.location.href = 'login.html';
@@ -109,24 +136,24 @@
     });
 
     function getBadgeClass(estado) {
-        if (estado.includes('APROBADO')) return 'badge-aprobado';
-        if (estado === 'PENDIENTE') return 'badge-pendiente';
+        if (!estado) return 'badge-pendiente';
+        if (estado.includes('APROBADO') || estado === 'DESEMBOLSADO') return 'badge-aprobado';
         if (estado === 'EN_REVISION') return 'badge-revision';
         if (estado === 'RECHAZADO') return 'badge-rechazado';
         return 'badge-pendiente';
     }
 
     function getCardClass(estado) {
-        if (estado.includes('APROBADO')) return 'aprobado';
-        if (estado === 'PENDIENTE') return 'pendiente';
+        if (!estado) return 'pendiente';
+        if (estado.includes('APROBADO') || estado === 'DESEMBOLSADO') return 'aprobado';
         if (estado === 'EN_REVISION') return 'revision';
         if (estado === 'RECHAZADO') return 'rechazado';
         return 'pendiente';
     }
 
     function getIconEstado(estado) {
-        if (estado.includes('APROBADO')) return '🎉';
-        if (estado === 'PENDIENTE') return '⏳';
+        if (!estado) return '⏳';
+        if (estado.includes('APROBADO') || estado === 'DESEMBOLSADO') return '🎉';
         if (estado === 'EN_REVISION') return '🔍';
         if (estado === 'RECHAZADO') return '❌';
         return '📄';
@@ -136,17 +163,16 @@
         try {
             const response = await fetch(`http://localhost:8080/api/prestamos/usuario/${usuario.id}`);
             const result = await response.json();
-
             const lista = document.getElementById('lista-solicitudes');
 
-            if (!result.success || result.solicitudes.length === 0) {
+            if (!result.success || !result.solicitudes || result.solicitudes.length === 0) {
                 lista.innerHTML = `
-                    <div class="text-center py-5 text-muted bg-white rounded-3">
+                    <div class="text-center py-5 text-muted bg-white rounded-3 shadow-sm">
                         <div style="font-size:3rem">📭</div>
-                        <div class="fw-semibold mt-2">No tienes solicitudes aún</div>
-                        <div class="small mb-3">Solicita tu primer préstamo Efectivo</div>
-                        <a href="solicitar_credito.html" class="btn btn-sm"
-                           style="background:#1a3fbf; color:white; border-radius:8px">
+                        <div class="fw-semibold mt-2">No tienes créditos registrados</div>
+                        <div class="small mb-3 mt-2">¿Necesitas efectivo? Solicita tu primer préstamo</div>
+                        <a href="solicitar_credito.html" class="btn btn-sm px-4 py-2"
+                           style="background:var(--efectiva-blue); color:white; border-radius:8px">
                             Solicitar ahora
                         </a>
                     </div>`;
@@ -161,42 +187,83 @@
 
             // Resumen
             document.getElementById('total-solicitudes').textContent = solicitudes.length;
-            document.getElementById('total-aprobados').textContent =
-                solicitudes.filter(s => s.estado.includes('APROBADO')).length;
-            document.getElementById('total-pendientes').textContent =
-                solicitudes.filter(s => s.estado === 'PENDIENTE' || s.estado === 'EN_REVISION').length;
-            document.getElementById('total-rechazados').textContent =
-                solicitudes.filter(s => s.estado === 'RECHAZADO').length;
+            document.getElementById('total-aprobados').textContent = solicitudes.filter(s => s.estado && (s.estado.includes('APROBADO') || s.estado === 'DESEMBOLSADO')).length;
+            document.getElementById('total-pendientes').textContent = solicitudes.filter(s => !s.estado || s.estado === 'PENDIENTE' || s.estado === 'EN_REVISION').length;
+            document.getElementById('total-rechazados').textContent = solicitudes.filter(s => s.estado === 'RECHAZADO').length;
 
-            // Lista
+            // Renderizar Lista
             lista.innerHTML = solicitudes.map(s => {
-                const fecha = new Date(s.fechaSolicitud).toLocaleDateString('es-PE', {
-                    day:'2-digit', month:'long', year:'numeric'
-                });
+                const fechaStr = s.fechaSolicitud ? new Date(s.fechaSolicitud).toLocaleDateString('es-PE', {day:'2-digit', month:'long', year:'numeric'}) : 'No registrada';
+                const monto = s.monto ? parseFloat(s.monto).toLocaleString('es-PE', {minimumFractionDigits:2}) : '0.00';
+                const cuota = s.cuotaMensual ? parseFloat(s.cuotaMensual).toLocaleString('es-PE', {minimumFractionDigits:2}) : '--';
+                const score = s.puntajeScoring || '--';
+                const estadoLimpio = (s.estado || 'PENDIENTE').replace('_', ' ');
+
+                // Botón de cronograma solo si está aprobado o desembolsado
+                const btnCronograma = (s.estado && (s.estado.includes('APROBADO') || s.estado === 'DESEMBOLSADO'))
+                    ? `<button onclick="abrirCronograma('${s.id}')" class="btn btn-outline-primary btn-sm mt-3 fw-medium rounded-pill px-4">📅 Ver Cronograma de Pagos</button>`
+                    : '';
+
                 return `
                 <div class="card-solicitud ${getCardClass(s.estado)}">
-                    <div class="d-flex justify-content-between align-items-start">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
                         <div>
                             <div class="d-flex align-items-center gap-2 mb-1">
                                 <span style="font-size:1.3rem">${getIconEstado(s.estado)}</span>
-                                <strong>Préstamo de S/ ${parseFloat(s.monto).toLocaleString('es-PE', {minimumFractionDigits:2})}</strong>
+                                <strong class="fs-5 text-dark">Préstamo de S/ ${monto}</strong>
                             </div>
-                            <div class="text-muted small mb-2">📅 Solicitado: ${fecha}</div>
-                            <div class="d-flex gap-3 small">
-                                <span>⏱ <strong>${s.plazoMeses} meses</strong></span>
-                                <span>💰 Cuota: <strong>S/ ${s.cuotaMensual ? parseFloat(s.cuotaMensual).toLocaleString('es-PE', {minimumFractionDigits:2}) : '--'}</strong></span>
-                                <span>🎯 Scoring: <strong>${s.puntajeScoring || '--'}/100</strong></span>
-                                ${s.proposito ? `<span>📌 ${s.proposito}</span>` : ''}
+                            <div class="text-muted small mb-3">📅 Solicitado: ${fechaStr}</div>
+                            <div class="d-flex flex-wrap gap-4 small text-dark bg-light p-2 rounded">
+                                <span>⏱ Plazo: <strong>${s.plazoMeses || '--'} meses</strong></span>
+                                <span>💰 Cuota estimada: <strong>S/ ${cuota}</strong></span>
+                                <span>🎯 Scoring: <strong>${score}/100</strong></span>
+                                ${s.proposito ? `<span>📌 Motivo: <strong>${s.proposito}</strong></span>` : ''}
                             </div>
+                            ${btnCronograma}
                         </div>
-                        <span class="badge-estado ${getBadgeClass(s.estado)}">${s.estado.replace('_', ' ')}</span>
+                        <span class="badge-estado ${getBadgeClass(s.estado)} shadow-sm">${estadoLimpio}</span>
                     </div>
                 </div>`;
             }).join('');
 
         } catch (error) {
+            console.error(error);
             document.getElementById('lista-solicitudes').innerHTML =
-                '<div class="alert alert-danger">Error conectando con el servidor.</div>';
+                '<div class="alert alert-danger shadow-sm">❌ Error al conectar con el servidor. Verifica tu conexión.</div>';
+        }
+    }
+
+    // Función para consultar y mostrar el cronograma
+    async function abrirCronograma(solicitudId) {
+        const tbody = document.getElementById('body-cronograma');
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div> Cargando...</td></tr>';
+
+        // Mostrar el modal inmediatamente
+        const modal = new bootstrap.Modal(document.getElementById('modalCronograma'));
+        modal.show();
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/prestamos/${solicitudId}/cronograma`);
+            const result = await response.json();
+
+            if (result.success && result.cronograma.length > 0) {
+                tbody.innerHTML = result.cronograma.map(c => {
+                    const fechaVenc = c.fechaVencimiento ? new Date(c.fechaVencimiento).toLocaleDateString('es-PE', {day:'2-digit', month:'short', year:'numeric'}) : '--';
+                    return `
+                    <tr>
+                        <td class="ps-4 text-muted fw-bold">${c.numeroCuota}</td>
+                        <td>${fechaVenc}</td>
+                        <td class="text-end text-muted">S/ ${c.amortizacion.toFixed(2)}</td>
+                        <td class="text-end text-muted">S/ ${c.interes.toFixed(2)}</td>
+                        <td class="text-end fw-bold text-dark">S/ ${c.cuota.toFixed(2)}</td>
+                        <td class="text-center pe-4"><span class="estado-cuota ${c.estado}">${c.estado}</span></td>
+                    </tr>`;
+                }).join('');
+            } else {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No se encontró el cronograma. Probablemente aún no se haya generado.</td></tr>';
+            }
+        } catch (error) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-4">Error al cargar el cronograma.</td></tr>';
         }
     }
 

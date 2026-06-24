@@ -6,23 +6,10 @@
     <title>Bandeja del Asesor - Financiera Efectiva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+
     <style>
-        :root { --efectiva-blue: #1a3fbf; }
-        body { background: #f0f4ff; font-family: 'Inter', sans-serif; }
-        .sidebar {
-            background: #0b1142; min-height: 100vh;
-            width: 240px; position: fixed; top: 0; left: 0;
-            padding: 2rem 1rem; color: white;
-        }
-        .sidebar .logo { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.3rem; }
-        .sidebar .rol { font-size: 0.75rem; opacity: 0.6; margin-bottom: 2rem; }
-        .sidebar a {
-            display: block; color: rgba(255,255,255,0.8);
-            text-decoration: none; padding: 0.6rem 1rem;
-            border-radius: 8px; margin-bottom: 0.3rem; font-size: 0.9rem;
-        }
-        .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.15); color: white; }
-        .main-content { margin-left: 240px; padding: 2rem; }
         .card-solicitud {
             background: white; border-radius: 12px;
             padding: 1.5rem; margin-bottom: 1rem;
@@ -34,17 +21,26 @@
         .card-solicitud.aprobado { border-left-color: #28a745; }
         .card-solicitud.revision { border-left-color: #17a2b8; }
         .card-solicitud.rechazado { border-left-color: #dc3545; }
+        .card-solicitud.desembolsado { border-left-color: #007bff; }
+
         .badge-estado { padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
         .badge-pendiente { background: #fff3cd; color: #856404; }
         .badge-aprobado { background: #d4edda; color: #155724; }
         .badge-revision { background: #d1ecf1; color: #0c5460; }
         .badge-rechazado { background: #f8d7da; color: #721c24; }
+        .badge-desembolsado { background: #cce5ff; color: #004085; }
+
         .scoring-bar { height: 6px; border-radius: 3px; background: #e9ecef; }
         .scoring-fill { height: 100%; border-radius: 3px; }
+
         .btn-aprobar { background: #28a745; color: white; border: none; border-radius: 8px; padding: 0.4rem 1rem; font-size: 0.85rem; }
         .btn-rechazar { background: #dc3545; color: white; border: none; border-radius: 8px; padding: 0.4rem 1rem; font-size: 0.85rem; }
+        .btn-desembolsar { background: #007bff; color: white; border: none; border-radius: 8px; padding: 0.4rem 1rem; font-size: 0.85rem; }
+
         .btn-aprobar:hover { background: #218838; }
         .btn-rechazar:hover { background: #c82333; }
+        .btn-desembolsar:hover { background: #0056b3; }
+
         .top-bar { background: white; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
         .filtro-btn { border-radius: 20px; font-size: 0.85rem; padding: 0.3rem 1rem; }
         .filtro-btn.active { background: var(--efectiva-blue); color: white; border-color: var(--efectiva-blue); }
@@ -63,7 +59,6 @@
 
 <div class="main-content">
 
-    <!-- Top bar -->
     <div class="top-bar d-flex justify-content-between align-items-center">
         <div>
             <strong>Panel del Asesor</strong>
@@ -75,7 +70,6 @@
         </button>
     </div>
 
-    <!-- Resumen -->
     <div class="row g-3 mb-4">
         <div class="col-md-3">
             <div class="bg-white rounded-3 p-3 text-center">
@@ -100,23 +94,30 @@
         </div>
         <div class="col-md-3">
             <div class="bg-white rounded-3 p-3 text-center">
-                <div style="font-size:1.8rem">❌</div>
-                <div class="fw-bold fs-4" id="cnt-rechazado">-</div>
-                <div class="text-muted small">Rechazados</div>
+                <div style="font-size:1.8rem">💸</div>
+                <div class="fw-bold fs-4" id="cnt-desembolsado">-</div>
+                <div class="text-muted small">Desembolsados</div>
             </div>
         </div>
     </div>
 
-    <!-- Filtros -->
-    <div class="d-flex gap-2 mb-3">
-        <button class="btn btn-outline-secondary filtro-btn active" onclick="filtrar('TODOS', this)">Todos</button>
-        <button class="btn btn-outline-warning filtro-btn" onclick="filtrar('PENDIENTE', this)">⏳ Pendientes</button>
-        <button class="btn btn-outline-info filtro-btn" onclick="filtrar('EN_REVISION', this)">🔍 En Revisión</button>
-        <button class="btn btn-outline-success filtro-btn" onclick="filtrar('APROBADO', this)">✅ Aprobados</button>
-        <button class="btn btn-outline-danger filtro-btn" onclick="filtrar('RECHAZADO', this)">❌ Rechazados</button>
+    <div class="d-flex justify-content-between align-items-end mb-3 flex-wrap gap-3">
+        <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-outline-secondary filtro-btn active" onclick="filtrar('TODOS', this)">Todos</button>
+            <button class="btn btn-outline-warning filtro-btn" onclick="filtrar('PENDIENTE', this)">⏳ Pendientes</button>
+            <button class="btn btn-outline-info filtro-btn" onclick="filtrar('EN_REVISION', this)">🔍 En Revisión</button>
+            <button class="btn btn-outline-success filtro-btn" onclick="filtrar('APROBADO', this)">✅ Aprobados</button>
+            <button class="btn btn-outline-primary filtro-btn" onclick="filtrar('DESEMBOLSADO', this)">💸 Desembolsados</button>
+            <button class="btn btn-outline-danger filtro-btn" onclick="filtrar('RECHAZADO', this)">❌ Rechazados</button>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 bg-white p-2 rounded-3 shadow-sm border">
+            <label class="small fw-bold text-muted mb-0 ms-1">📅 Buscar por fecha:</label>
+            <input type="date" id="filtro-fecha" class="form-control form-control-sm border-0" style="background:#f8f9fa; outline:none; box-shadow:none;">
+            <button class="btn btn-sm text-muted border-0" onclick="limpiarFecha()" title="Limpiar fecha">✖️</button>
+        </div>
     </div>
 
-    <!-- Lista -->
     <div id="lista-solicitudes">
         <div class="text-center py-5 text-muted">
             <div style="font-size:2rem">⏳</div>
@@ -128,16 +129,40 @@
 <script>
     let todasSolicitudes = [];
     let filtroActual = 'TODOS';
+    let fechaFiltroActual = ''; // Variable para almacenar la fecha elegida
+
+    // Preparación para JWT (Extrae el token del localStorage si existe)
+    function getHeaders() {
+        const token = localStorage.getItem('token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        return headers;
+    }
+
+    // Escuchador para cuando el usuario cambia la fecha en el calendario
+    document.getElementById('filtro-fecha').addEventListener('change', function(e) {
+        fechaFiltroActual = e.target.value;
+        aplicarFiltrosCombinados();
+    });
+
+    // Función para borrar la fecha seleccionada
+    function limpiarFecha() {
+        document.getElementById('filtro-fecha').value = '';
+        fechaFiltroActual = '';
+        aplicarFiltrosCombinados();
+    }
 
     async function cargarSolicitudes() {
         try {
-            const response = await fetch('http://localhost:8080/api/prestamos/todas');
+            const response = await fetch('http://localhost:8080/api/prestamos/todas', {
+                headers: getHeaders()
+            });
             const result = await response.json();
 
             if (result.success) {
                 todasSolicitudes = result.solicitudes;
                 actualizarContadores();
-                renderLista(todasSolicitudes);
+                aplicarFiltrosCombinados(); // Usamos el filtro combinado en lugar del render directo
             }
         } catch (error) {
             document.getElementById('lista-solicitudes').innerHTML =
@@ -150,17 +175,41 @@
         document.getElementById('cnt-pendiente').textContent =
             todasSolicitudes.filter(s => s.estado === 'PENDIENTE' || s.estado === 'EN_REVISION').length;
         document.getElementById('cnt-aprobado').textContent =
-            todasSolicitudes.filter(s => s.estado.includes('APROBADO')).length;
-        document.getElementById('cnt-rechazado').textContent =
-            todasSolicitudes.filter(s => s.estado === 'RECHAZADO').length;
+            todasSolicitudes.filter(s => s.estado === 'APROBADO' || s.estado === 'APROBADO_PROVISIONAL').length;
+        document.getElementById('cnt-desembolsado').textContent =
+            todasSolicitudes.filter(s => s.estado === 'DESEMBOLSADO').length;
     }
 
+    // Lógica para capturar el botón de estado presionado
     function filtrar(estado, btn) {
         filtroActual = estado;
         document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filtradas = estado === 'TODOS' ? todasSolicitudes :
-            todasSolicitudes.filter(s => s.estado.includes(estado));
+        if(btn) btn.classList.add('active');
+        aplicarFiltrosCombinados();
+    }
+
+    // Lógica maestra que combina Estado + Fecha
+    function aplicarFiltrosCombinados() {
+        let filtradas = todasSolicitudes;
+
+        // 1. Filtrar por Estado
+        if (filtroActual !== 'TODOS') {
+            filtradas = filtradas.filter(s => {
+                if(filtroActual === 'APROBADO') return s.estado === 'APROBADO' || s.estado === 'APROBADO_PROVISIONAL';
+                return s.estado === filtroActual;
+            });
+        }
+
+        // 2. Filtrar por Fecha
+        if (fechaFiltroActual) {
+            filtradas = filtradas.filter(s => {
+                if (!s.fechaSolicitud) return false;
+                // Extraemos solo la porción YYYY-MM-DD de la fecha que llega del servidor
+                const fechaCorta = s.fechaSolicitud.split('T')[0];
+                return fechaCorta === fechaFiltroActual;
+            });
+        }
+
         renderLista(filtradas);
     }
 
@@ -171,6 +220,7 @@
     }
 
     function getCardClass(estado) {
+        if (estado === 'DESEMBOLSADO') return 'desembolsado';
         if (estado.includes('APROBADO')) return 'aprobado';
         if (estado === 'PENDIENTE') return 'pendiente';
         if (estado === 'EN_REVISION') return 'revision';
@@ -179,6 +229,7 @@
     }
 
     function getBadgeClass(estado) {
+        if (estado === 'DESEMBOLSADO') return 'badge-desembolsado';
         if (estado.includes('APROBADO')) return 'badge-aprobado';
         if (estado === 'PENDIENTE') return 'badge-pendiente';
         if (estado === 'EN_REVISION') return 'badge-revision';
@@ -192,7 +243,7 @@
             lista.innerHTML = `
                 <div class="text-center py-5 bg-white rounded-3 text-muted">
                     <div style="font-size:2.5rem">📭</div>
-                    <div class="fw-semibold mt-2">No hay solicitudes en esta categoría</div>
+                    <div class="fw-semibold mt-2">No hay solicitudes para este filtro</div>
                 </div>`;
             return;
         }
@@ -203,7 +254,10 @@
             });
             const scoring = s.puntajeScoring || 0;
             const colorScoring = getScoringColor(scoring);
+
+            // Lógicas de visibilidad de botones
             const esPendiente = s.estado === 'PENDIENTE' || s.estado === 'EN_REVISION' || s.estado === 'APROBADO_PROVISIONAL';
+            const esAprobadoParaDesembolso = s.estado === 'APROBADO' || s.estado === 'APROBADO_PROVISIONAL';
 
             return `
             <div class="card-solicitud ${getCardClass(s.estado)}" id="card-${s.id}">
@@ -222,7 +276,6 @@
                             ${s.evaluadoPor ? `<div class="col-auto small text-muted">👤 Evaluado por: <strong>${s.evaluadoPor}</strong></div>` : ''}
                         </div>
 
-                        <!-- Scoring bar -->
                         <div class="d-flex align-items-center gap-2">
                             <span class="small text-muted">Scoring:</span>
                             <div class="scoring-bar flex-grow-1" style="max-width:150px">
@@ -232,29 +285,39 @@
                         </div>
                     </div>
 
-                    <!-- Botones de acción -->
-                    ${esPendiente ? `
                     <div class="d-flex flex-column gap-2 ms-3">
+                        ${esPendiente ? `
                         <button class="btn-aprobar" onclick="evaluarSolicitud('${s.id}', 'APROBADO')">
                             ✅ Aprobar
                         </button>
                         <button class="btn-rechazar" onclick="evaluarSolicitud('${s.id}', 'RECHAZADO')">
                             ❌ Rechazar
                         </button>
-                    </div>` : ''}
+                        ` : ''}
+
+                        ${esAprobadoParaDesembolso ? `
+                        <button class="btn-desembolsar" onclick="evaluarSolicitud('${s.id}', 'DESEMBOLSADO')">
+                            💸 Desembolsar
+                        </button>
+                        ` : ''}
+                    </div>
                 </div>
             </div>`;
         }).join('');
     }
 
     async function evaluarSolicitud(id, nuevoEstado) {
-        const accion = nuevoEstado === 'APROBADO' ? 'aprobar' : 'rechazar';
+        let accion = 'evaluar';
+        if(nuevoEstado === 'APROBADO') accion = 'aprobar';
+        if(nuevoEstado === 'RECHAZADO') accion = 'rechazar';
+        if(nuevoEstado === 'DESEMBOLSADO') accion = 'desembolsar';
+
         if (!confirm(`¿Estás seguro de ${accion} esta solicitud?`)) return;
 
         try {
             const response = await fetch(`http://localhost:8080/api/prestamos/${id}/evaluar`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getHeaders(),
                 body: JSON.stringify({
                     estado: nuevoEstado,
                     evaluadoPor: 'Asesor Financiero'
@@ -263,24 +326,25 @@
 
             const result = await response.json();
             if (result.success) {
-                // Actualizar localmente sin recargar
                 const idx = todasSolicitudes.findIndex(s => s.id === id);
                 if (idx !== -1) {
                     todasSolicitudes[idx].estado = nuevoEstado;
                     todasSolicitudes[idx].evaluadoPor = 'Asesor Financiero';
                 }
                 actualizarContadores();
-                const filtradas = filtroActual === 'TODOS' ? todasSolicitudes :
-                    todasSolicitudes.filter(s => s.estado.includes(filtroActual));
-                renderLista(filtradas);
+                aplicarFiltrosCombinados(); // Actualiza la lista respetando estado y fecha
+            } else {
+                alert('No se pudo procesar: ' + result.message);
             }
         } catch (error) {
-            alert('Error al evaluar la solicitud.');
+            alert('Error de conexión con el servidor.');
         }
     }
 
     document.getElementById('btn-cerrar').addEventListener('click', (e) => {
         e.preventDefault();
+        localStorage.removeItem('usuario');
+        localStorage.removeItem('token');
         window.location.href = 'login.html';
     });
 

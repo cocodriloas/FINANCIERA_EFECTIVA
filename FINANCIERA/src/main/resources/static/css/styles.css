@@ -1,29 +1,94 @@
-/* Variables de colores corporativos Efectiva */
+/* ====================================================
+   VARIABLES GLOBALES (Paleta Oficial Efectiva)
+   ==================================================== */
 :root {
-    --efectiva-blue: #2334e8;      /* Azul principal de los botones */
-    --efectiva-dark-blue: #151a6a; /* Azul oscuro para títulos */
-    --efectiva-cyan: #39c2c2;      /* Turquesa del fondo principal */
+    --efectiva-blue: #1a3fbf;      /* Azul principal (Botones, acentos) */
+    --efectiva-dark-blue: #0b1142; /* Azul marino oscuro (Sidebar, Login) */
+    --efectiva-cyan: #39c2c2;      /* Turquesa (Tarjetas, hover) */
+    --efectiva-bg: #f4f5f0;        /* Gris perla (Fondo de las páginas) */
 }
 
-/* Tipografía general */
+/* ====================================================
+   TIPOGRAFÍA Y CUERPO GENERAL
+   ==================================================== */
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f4f5f0; /* Color gris perla del fondo del sitio */
+    background-color: var(--efectiva-bg);
+    color: #333;
 }
 
-/* Tipografía para títulos especiales */
 .font-serif {
     font-family: 'Merriweather', serif;
 }
 
-/* Sobreescribiendo colores de Bootstrap */
-.text-primary {
-    color: var(--efectiva-blue) !important;
+/* ====================================================
+   MENÚ LATERAL (SIDEBAR UNIFICADO)
+   ==================================================== */
+.sidebar {
+    background-color: var(--efectiva-dark-blue);
+    min-height: 100vh;
+    width: 260px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 2rem 1rem;
+    z-index: 100;
+    color: white;
+    display: flex;
+    flex-direction: column;
 }
+
+.sidebar .logo, .sidebar h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: white;
+    padding: 0 1rem;
+}
+
+.sidebar .rol {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar a, .sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar a:hover, .sidebar a.active, .sidebar .nav-link:hover, .sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+/* Espacio para el contenido a la derecha del sidebar */
+.main-content {
+    margin-left: 260px;
+    padding: 2rem;
+}
+
+/* ====================================================
+   SOBREESCRITURA DE BOOTSTRAP (Botones y Textos)
+   ==================================================== */
+.text-primary { color: var(--efectiva-blue) !important; }
+.bg-primary { background-color: var(--efectiva-blue) !important; }
 
 .btn-primary {
     background-color: var(--efectiva-blue);
     border-color: var(--efectiva-blue);
+    color: white;
 }
 
 .btn-primary:hover {
@@ -32,17 +97,11 @@ body {
 }
 
 .btn-outline-primary {
-    color: var(--efectiva-dark-blue);
-    border-color: var(--efectiva-dark-blue);
+    color: var(--efectiva-blue);
+    border-color: var(--efectiva-blue);
 }
 
 .btn-outline-primary:hover {
-    background-color: var(--efectiva-dark-blue);
+    background-color: var(--efectiva-blue);
     color: white;
-}
-
-/* Estilos específicos de secciones */
-.hero-section {
-    background-color: var(--efectiva-cyan);
-    /* El banner real tiene una forma azul diagonal, podemos agregarla con CSS avanzado más adelante si lo deseas */
 }
