@@ -163,6 +163,31 @@
         </table>
     </div>
 
+    <!-- INICIO MÓDULO MORA OFICIAL (CRITERIO 4) -->
+    <div class="card-reporte mb-4 shadow-sm border-0" style="border-left: 4px solid #dc3545;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0">🚨 Cartera Morosa (Módulo de Cobranzas - Criterio 4)</h6>
+            <button class="btn btn-danger btn-sm" onclick="cargarMorosos()">Consultar Servidor</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table tabla-mora">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID Préstamo</th>
+                    <th>Días de Atraso</th>
+                    <th>Banda de Mora</th>
+                    <th>Cuota Atrasada</th>
+                    <th>Estado Actual</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-morosos">
+                <tr><td colspan="5" class="text-center text-muted py-3">Presiona "Consultar Servidor" para obtener los datos.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- FIN MÓDULO MORA OFICIAL (CRITERIO 4) -->
+
     <div class="card-reporte shadow-sm border-0">
         <h6 class="fw-bold mb-3">📈 Resumen Ejecutivo — Indicadores Clave</h6>
         <div class="row g-3">
@@ -425,6 +450,53 @@
             console.error('Error cargando reportes actuales:', error);
         }
     }
+
+    // --- INICIO FUNCION CRITERIO 4 ---
+    async function cargarMorosos() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Error: No tienes sesión iniciada o falta el token.");
+            return;
+        }
+        try {
+            const response = await fetch("http://localhost:8080/api/cobranzas/cartera", {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                }
+            });
+            if (!response.ok) throw new Error("Error de permisos o servidor: " + response.status);
+
+            const data = await response.json();
+            const tbody = document.getElementById("tabla-morosos");
+            tbody.innerHTML = "";
+
+            if (data.cartera.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5' class='text-center py-3 text-success fw-bold'>✅ No hay clientes en mora actualmente.</td></tr>";
+            } else {
+                data.cartera.forEach(moroso => {
+                    let colorBanda = moroso.banda === 'PREVENTIVA' ? 'bg-info' :
+                                     moroso.banda === 'TEMPRANA' ? 'bg-warning text-dark' : 'bg-danger';
+
+                    const fila = `
+                        <tr>
+                            <td>${moroso.solicitudId.substring(0,8).toUpperCase()}...</td>
+                            <td class="text-danger fw-bold">${moroso.diasAtraso} días</td>
+                            <td><span class="badge ${colorBanda}">${moroso.banda}</span></td>
+                            <td>N° ${moroso.cuotaAtrasada}</td>
+                            <td><span class="badge bg-secondary">${moroso.estadoCredito}</span></td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += fila;
+                });
+            }
+        } catch (error) {
+            console.error("Error cargando morosos:", error);
+            alert("Hubo un problema al cargar la cartera morosa.");
+        }
+    }
+    // --- FIN FUNCION CRITERIO 4 ---
 
     // Inicializamos al cargar la página
     dibujarGraficosHistoricos();

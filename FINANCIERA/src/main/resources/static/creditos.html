@@ -126,12 +126,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // 1. Extraer token para enviarlo a la API
+    function getHeaders() {
+        const token = localStorage.getItem('token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        return headers;
+    }
+
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     if (!usuario || !usuario.id) window.location.href = 'login.html';
 
     document.getElementById('btn-cerrar').addEventListener('click', (e) => {
         e.preventDefault();
         localStorage.removeItem('usuario');
+        localStorage.removeItem('token'); // Limpieza completa
         window.location.href = 'login.html';
     });
 
@@ -161,7 +170,11 @@
 
     async function cargarSolicitudes() {
         try {
-            const response = await fetch(`http://localhost:8080/api/prestamos/usuario/${usuario.id}`);
+            // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
+            const response = await fetch(`http://localhost:8080/api/prestamos/usuario/${usuario.id}`, {
+                method: 'GET',
+                headers: getHeaders()
+            });
             const result = await response.json();
             const lista = document.getElementById('lista-solicitudes');
 
@@ -243,7 +256,11 @@
         modal.show();
 
         try {
-            const response = await fetch(`http://localhost:8080/api/prestamos/${solicitudId}/cronograma`);
+            // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ TAMBIÉN
+            const response = await fetch(`http://localhost:8080/api/prestamos/${solicitudId}/cronograma`, {
+                method: 'GET',
+                headers: getHeaders()
+            });
             const result = await response.json();
 
             if (result.success && result.cronograma.length > 0) {

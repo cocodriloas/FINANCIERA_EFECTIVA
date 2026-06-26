@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -124,7 +125,7 @@ public class PrestamoController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            e.printStackTrace(); // Imprime el error real en la consola de IntelliJ
+            e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             response.put("success", false);
             response.put("message", "Error interno al solicitar: " + e.getMessage());
@@ -136,7 +137,6 @@ public class PrestamoController {
     public ResponseEntity<?> getSolicitudesUsuario(@PathVariable String usuarioId) {
         Map<String, Object> response = new HashMap<>();
         try {
-            // Consulta 100% blindada para que el cliente siempre vea sus créditos
             List<SolicitudPrestamo> solicitudes = solicitudRepo.findAll().stream()
                     .filter(s -> s.getUsuarioId() != null && s.getUsuarioId().toString().equals(usuarioId))
                     .sorted((a, b) -> {
@@ -158,9 +158,17 @@ public class PrestamoController {
     }
 
     @GetMapping("/todas")
-    public ResponseEntity<?> getTodasSolicitudes() {
+    public ResponseEntity<?> getTodasSolicitudes(HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         try {
+            // SEGURIDAD BLINDADA: Ahora acepta GERENTE y GERENCIA
+            String rol = (String) request.getAttribute("rolUsuario");
+            if (rol == null || (!rol.equals("ASESOR") && !rol.equals("ADMINISTRADOR") && !rol.equals("COMITE") && !rol.equals("RIESGOS") && !rol.equals("GERENTE") && !rol.equals("GERENCIA"))) {
+                response.put("success", false);
+                response.put("message", "Acceso denegado: No tienes permisos para ver la bandeja general.");
+                return ResponseEntity.status(403).body(response);
+            }
+
             List<SolicitudPrestamo> solicitudes = solicitudRepo.findAll().stream()
                     .sorted((a, b) -> {
                         if (a.getFechaSolicitud() == null) return 1;
@@ -183,7 +191,6 @@ public class PrestamoController {
     public ResponseEntity<?> getCronograma(@PathVariable String id) {
         Map<String, Object> response = new HashMap<>();
         try {
-            // Consulta blindada al cronograma
             List<CronogramaPago> cronograma = cronogramaRepo.findAll().stream()
                     .filter(c -> c.getSolicitudId() != null && c.getSolicitudId().toString().equals(id))
                     .sorted(Comparator.comparingInt(CronogramaPago::getNumeroCuota))
@@ -202,19 +209,44 @@ public class PrestamoController {
 
     @PutMapping("/{id}/evaluar")
     @Transactional
-    public ResponseEntity<?> evaluarSolicitud(@PathVariable String id, @RequestBody Map<String, String> body) {
+    public ResponseEntity<?> evaluarSolicitud(@PathVariable String id, @RequestBody Map<String, String> body, HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
+
+        // SEGURIDAD BLINDADA: Ahora acepta GERENTE y GERENCIA
+        String rol = (String) request.getAttribute("rolUsuario");
+        if (rol == null || (!rol.equals("ASESOR") && !rol.equals("ADMINISTRADOR") && !rol.equals("COMITE") && !rol.equals("RIESGOS") && !rol.equals("GERENTE") && !rol.equals("GERENCIA"))) {
+            response.put("success", false);
+            response.put("message", "Acceso denegado: No tienes los permisos suficientes.");
+            return ResponseEntity.status(403).body(response);
+        }
+
         try {
             SolicitudPrestamo solicitud = solicitudRepo.findById(UUID.fromString(id))
                     .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
 
             String nuevoEstado = body.get("estado");
             String estadoAnterior = solicitud.getEstado() != null ? solicitud.getEstado() : "";
+            double montoPrestamo = solicitud.getMonto().doubleValue();
 
+            // Criterio 2: RUTA DE APROBACIÓN POR MONTOS (Reglas de negocio actualizadas para incluir Gerencia)
+            if (nuevoEstado.equals("APROBADO") || nuevoEstado.equals("APROBADO_PROVISIONAL")) {
+                if (montoPrestamo > 20000 && (!rol.equals("COMITE") && !rol.equals("RIESGOS") && !rol.equals("GERENTE") && !rol.equals("GERENCIA"))) {
+                    response.put("success", false);
+                    response.put("message", "Préstamos mayores a S/ 20,000 requieren aprobación exclusiva de COMITÉ, RIESGOS o GERENCIA.");
+                    return ResponseEntity.status(403).body(response);
+                } else if (montoPrestamo > 10000 && rol.equals("ASESOR")) {
+                    response.put("success", false);
+                    response.put("message", "Préstamos mayores a S/ 10,000 requieren aprobación de ADMINISTRADOR o superior.");
+                    return ResponseEntity.status(403).body(response);
+                }
+            }
+
+            // Aplicar el estado si pasó las reglas
             solicitud.setEstado(nuevoEstado);
             solicitud.setEvaluadoPor(body.get("evaluadoPor"));
             solicitud.setFechaEvaluacion(java.time.LocalDateTime.now());
 
+            // Generar cronograma si se aprueba
             if ((nuevoEstado.equals("APROBADO") || nuevoEstado.equals("APROBADO_PROVISIONAL"))
                     && !estadoAnterior.contains("APROBADO") && !estadoAnterior.equals("DESEMBOLSADO")) {
 
@@ -227,6 +259,7 @@ public class PrestamoController {
                 }
             }
 
+            // Desembolsar
             if (nuevoEstado.equals("DESEMBOLSADO") && !estadoAnterior.equals("DESEMBOLSADO")) {
                 List<CronogramaPago> existentes = cronogramaRepo.findAll().stream()
                         .filter(c -> c.getSolicitudId() != null && c.getSolicitudId().toString().equals(id))
@@ -290,8 +323,6 @@ public class PrestamoController {
             double amortizacion = cuotaFija - interes;
 
             CronogramaPago cuota = new CronogramaPago();
-
-            // Asignación manual de UUID para evitar errores de Hibernate
             try {
                 cuota.getClass().getMethod("setId", UUID.class).invoke(cuota, UUID.randomUUID());
             } catch (Exception ignored) {}
@@ -313,7 +344,6 @@ public class PrestamoController {
             fechaVencimiento = fechaVencimiento.plusMonths(1);
         }
 
-        // Guardar todo de una sola vez
         cronogramaRepo.saveAll(listaCuotas);
     }
 

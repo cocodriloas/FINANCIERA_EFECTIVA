@@ -36,6 +36,9 @@ public class JwtInterceptor implements HandlerInterceptor {
             // Validamos que la "Pulsera VIP" sea real y no esté vencida
             String correo = jwtUtil.extraerCorreo(token);
             if (correo != null && jwtUtil.validarToken(token, correo)) {
+                // NUEVO: Extraer el rol y pasarlo a la request
+                String rol = jwtUtil.extraerRol(token);
+                request.setAttribute("rolUsuario", rol);
                 return true; // ¡El portero deja pasar la petición!
             }
         } catch (Exception e) {

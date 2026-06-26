@@ -196,12 +196,21 @@
 </div>
 
 <script>
+    // 1. Extraer token para enviarlo a la API
+    function getHeaders() {
+        const token = localStorage.getItem('token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        return headers;
+    }
+
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     if (!usuario || !usuario.id) window.location.href = 'login.html';
 
     document.getElementById('btn-cerrar').addEventListener('click', (e) => {
         e.preventDefault();
         localStorage.removeItem('usuario');
+        localStorage.removeItem('token'); // Limpieza completa
         window.location.href = 'login.html';
     });
 
@@ -272,9 +281,10 @@
         };
 
         try {
+            // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
             const response = await fetch('http://localhost:8080/api/prestamos/solicitar', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getHeaders(), // <-- El portero ahora lee el token
                 body: JSON.stringify(payload)
             });
 

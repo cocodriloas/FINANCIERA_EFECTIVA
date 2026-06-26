@@ -93,12 +93,21 @@
 </div>
 
 <script>
+    // 1. Extraer token para enviarlo a la API
+    function getHeaders() {
+        const token = localStorage.getItem('token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        return headers;
+    }
+
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     if (!usuario || !usuario.id) window.location.href = 'login.html';
 
     document.getElementById('btn-cerrar').addEventListener('click', (e) => {
         e.preventDefault();
         localStorage.removeItem('usuario');
+        localStorage.removeItem('token'); // Limpieza completa
         window.location.href = 'login.html';
     });
 
@@ -113,8 +122,13 @@
 
     async function cargarPerfil() {
         try {
-            const resCuenta = await fetch(`http://localhost:8080/api/cuentas/usuario/${usuario.id}`);
+            // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
+            const resCuenta = await fetch(`http://localhost:8080/api/cuentas/usuario/${usuario.id}`, {
+                method: 'GET',
+                headers: getHeaders()
+            });
             const dataCuenta = await resCuenta.json();
+
             if (dataCuenta.success && dataCuenta.cuentas.length > 0) {
                 const cuenta = dataCuenta.cuentas[0];
                 document.getElementById('perfil-cuenta').textContent = cuenta.numeroCuenta;
@@ -124,8 +138,13 @@
                 document.getElementById('perfil-estado-cuenta').textContent = cuenta.estado;
             }
 
-            const resSol = await fetch(`http://localhost:8080/api/prestamos/usuario/${usuario.id}`);
+            // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
+            const resSol = await fetch(`http://localhost:8080/api/prestamos/usuario/${usuario.id}`, {
+                method: 'GET',
+                headers: getHeaders()
+            });
             const dataSol = await resSol.json();
+
             if (dataSol.success) {
                 const sols = dataSol.solicitudes;
                 const aprobados = sols.filter(s => s.estado.includes('APROBADO') || s.estado === 'DESEMBOLSADO');

@@ -42,7 +42,7 @@
         </li>
     </ul>
     <div class="mt-auto">
-        <a href="index.html" class="nav-link text-danger" id="btn-cerrar">
+        <a href="login.html" class="nav-link text-danger" id="btn-cerrar">
             <i class="bi bi-box-arrow-left me-2"></i> Cerrar Sesión
         </a>
     </div>
@@ -148,6 +148,14 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // 1. Extraer token para enviarlo a la API
+    function getHeaders() {
+        const token = localStorage.getItem('token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        return headers;
+    }
+
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     if (!usuario || !usuario.id) window.location.href = 'login.html';
 
@@ -155,6 +163,7 @@
     document.getElementById('btn-cerrar').addEventListener('click', (e) => {
         e.preventDefault();
         localStorage.removeItem('usuario');
+        localStorage.removeItem('token'); // Limpieza completa
         window.location.href = 'login.html';
     });
 
@@ -163,7 +172,11 @@
     // 1. Cargar la cuenta de origen al abrir la página
     async function cargarCuentaOrigen() {
         try {
-            const response = await fetch(`http://localhost:8080/api/cuentas/usuario/${usuario.id}`);
+            // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
+            const response = await fetch(`http://localhost:8080/api/cuentas/usuario/${usuario.id}`, {
+                method: 'GET',
+                headers: getHeaders()
+            });
             const result = await response.json();
 
             const selectOrigen = document.getElementById('cuenta-origen');
@@ -194,9 +207,10 @@
         btn.textContent = 'Procesando...';
 
         try {
+            // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
             const response = await fetch('http://localhost:8080/api/cuentas/transferir', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getHeaders(), // <-- El portero ahora lee el token
                 body: JSON.stringify({
                     cuentaOrigenId: cuentaOrigenId,
                     numeroCuentaDestino: destino,
