@@ -315,7 +315,7 @@
         if (!confirm(`¿Estás seguro de ${accion} esta solicitud?`)) return;
 
         try {
-            const response = await fetch(`http://localhost:8080/api/prestamos/${id}/evaluar`, {
+            const response = await fetch(`/api/prestamos/${id}/evaluar`, {
                 method: 'PUT',
                 headers: getHeaders(),
                 body: JSON.stringify({
