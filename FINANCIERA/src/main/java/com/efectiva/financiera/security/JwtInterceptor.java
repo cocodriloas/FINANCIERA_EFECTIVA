@@ -39,6 +39,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                 // NUEVO: Extraer el rol y pasarlo a la request
                 String rol = jwtUtil.extraerRol(token);
                 request.setAttribute("rolUsuario", rol);
+                request.setAttribute("correoUsuario", correo);
                 return true; // ¡El portero deja pasar la petición!
             }
         } catch (Exception e) {

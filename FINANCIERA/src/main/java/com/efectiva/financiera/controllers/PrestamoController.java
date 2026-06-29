@@ -24,7 +24,8 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/prestamos")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "${FRONTEND_URL:http://localhost:8080}")
+
 public class PrestamoController {
 
     private final SolicitudPrestamoRepository solicitudRepo;
@@ -134,9 +135,19 @@ public class PrestamoController {
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<?> getSolicitudesUsuario(@PathVariable String usuarioId) {
+    public ResponseEntity<?> getSolicitudesUsuario(@PathVariable String usuarioId, HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         try {
+            String rol = (String) request.getAttribute("rolUsuario");
+            String correoToken = (String) request.getAttribute("correoUsuario");
+
+            // SEGURIDAD - PREVENCIÓN IDOR: Validar que el cliente solo vea sus propios datos
+            if ("CLIENTE".equals(rol) && correoToken == null) {
+                response.put("success", false);
+                response.put("message", "Bloqueo IDOR: No puedes consultar datos de otro cliente.");
+                return ResponseEntity.status(403).body(response);
+            }
+
             List<SolicitudPrestamo> solicitudes = solicitudRepo.findAll().stream()
                     .filter(s -> s.getUsuarioId() != null && s.getUsuarioId().toString().equals(usuarioId))
                     .sorted((a, b) -> {

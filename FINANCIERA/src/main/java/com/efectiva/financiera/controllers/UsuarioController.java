@@ -22,7 +22,8 @@ import java.util.Random;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "${FRONTEND_URL:http://localhost:8080}")
+
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -30,6 +31,10 @@ public class UsuarioController {
     private final AsesorRepository asesorRepository;
     private final CuentaRepository cuentaRepository;
     private final JwtUtil jwtUtil;
+
+    // SEGURIDAD: PREVENCIÓN DE FUERZA BRUTA
+    private static final Map<String, Integer> intentosFallidos = new HashMap<>();
+    private static final int MAX_INTENTOS = 3;
 
     public UsuarioController(UsuarioService usuarioService,
                              UsuarioRepository usuarioRepository,
@@ -47,23 +52,17 @@ public class UsuarioController {
     public ResponseEntity<?> registrar(@RequestBody RegistroRequestDto dto) {
         Map<String, Object> response = new HashMap<>();
         try {
-            // 1. Registramos al usuario
             usuarioService.registrarUsuario(dto);
-
-            // 2. Buscamos al usuario recién creado para obtener su ID
             Optional<Usuario> nuevoUsuario = usuarioRepository.findByCorreo(dto.getCorreo());
 
             if (nuevoUsuario.isPresent()) {
-                // 3. Le creamos una cuenta de ahorros automáticamente
                 Cuenta nuevaCuenta = new Cuenta();
                 nuevaCuenta.setUsuarioId(nuevoUsuario.get().getId());
 
-                // Generamos un número de cuenta aleatorio
                 Random random = new Random();
                 int numeroAleatorio = 1000000 + random.nextInt(9000000);
                 nuevaCuenta.setNumeroCuenta("193-" + numeroAleatorio);
 
-                // CORRECCIÓN: Nombre más corto para no exceder los 20 caracteres de la BD
                 nuevaCuenta.setTipoCuenta("Ahorro Digital");
                 nuevaCuenta.setMoneda("PEN");
                 nuevaCuenta.setSaldo(BigDecimal.ZERO);
@@ -85,11 +84,21 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
         Map<String, Object> response = new HashMap<>();
+
+        // SEGURIDAD: Verificar si la cuenta está bloqueada por Fuerza Bruta
+        if (intentosFallidos.getOrDefault(dto.getCorreo(), 0) >= MAX_INTENTOS) {
+            response.put("success", false);
+            response.put("message", "Seguridad: Cuenta bloqueada temporalmente por múltiples intentos fallidos.");
+            return new ResponseEntity<>(response, HttpStatus.TOO_MANY_REQUESTS);
+        }
+
         try {
             // 1. Intentar loguear como CLIENTE
             try {
                 Usuario usuario = usuarioService.login(dto);
                 String token = jwtUtil.generarToken(usuario.getCorreo(), "CLIENTE");
+
+                intentosFallidos.remove(dto.getCorreo()); // Resetea los intentos si es exitoso
 
                 response.put("success", true);
                 response.put("data", usuario);
@@ -99,7 +108,7 @@ public class UsuarioController {
                 return ResponseEntity.ok(response);
             } catch (RuntimeException e) {
                 if (e.getMessage().equals("Contraseña incorrecta")) {
-                    throw e;
+                    throw e; // Pasa al catch final para sumar el intento
                 }
             }
 
@@ -109,6 +118,8 @@ public class UsuarioController {
                 Asesor asesor = asesorOpt.get();
                 if (asesor.getPassword().equals(dto.getPassword())) {
                     String token = jwtUtil.generarToken(asesor.getCorreo(), asesor.getRol());
+
+                    intentosFallidos.remove(dto.getCorreo()); // Resetea los intentos si es exitoso
 
                     response.put("success", true);
                     response.put("data", asesor);
@@ -129,6 +140,9 @@ public class UsuarioController {
             throw new RuntimeException("Usuario no encontrado");
 
         } catch (RuntimeException e) {
+            // SEGURIDAD: Sumar intento fallido por Fuerza Bruta
+            intentosFallidos.put(dto.getCorreo(), intentosFallidos.getOrDefault(dto.getCorreo(), 0) + 1);
+
             response.put("success", false);
             response.put("message", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);

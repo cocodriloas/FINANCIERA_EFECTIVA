@@ -9,7 +9,8 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/cuentas")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "${FRONTEND_URL:http://localhost:8080}")
+
 public class CuentaController {
 
     private final CuentaRepository cuentaRepository;

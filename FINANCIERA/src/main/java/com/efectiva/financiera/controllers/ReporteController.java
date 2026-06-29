@@ -11,7 +11,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reportes")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "${FRONTEND_URL:http://localhost:8080}")
+
 public class ReporteController {
 
     private final KpiCarteraMensualRepository kpiRepository;
