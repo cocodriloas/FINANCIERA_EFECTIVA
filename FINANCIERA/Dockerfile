@@ -1,19 +1,14 @@
-FROM eclipse-temurin:17-jdk-jammy
+# Usamos una imagen oficial que ya trae Java 17 y Maven listos
+FROM maven:3.8.5-openjdk-17
 WORKDIR /app
 
-# Copiamos los archivos de Maven
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+# Copiamos solo el pom.xml primero para descargar dependencias
+COPY pom.xml ./
+RUN mvn dependency:go-offline
 
-# Damos permisos de ejecución al wrapper (Regla de la guía)
-RUN chmod +x mvnw
-
-# Descargamos dependencias
-RUN ./mvnw dependency:go-offline
-
-# Copiamos el código fuente y compilamos
+# Copiamos tu código fuente y compilamosgit add Dockerfile
 COPY src ./src
-RUN ./mvnw package -DskipTests
+RUN mvn package -DskipTests
 
 # Ejecutamos la aplicación
 CMD ["sh", "-c", "java -jar target/*.jar"]
