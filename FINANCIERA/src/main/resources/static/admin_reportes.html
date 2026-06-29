@@ -307,7 +307,7 @@
     // 4. DATOS REALES DE LA BASE DE DATOS (CON SEGURIDAD JWT)
     async function cargarReportes() {
         try {
-            const response = await fetch('http://localhost:8080/api/prestamos/todas', {
+            const response = await fetch('/api/prestamos/todas', {
                 headers: getHeaders() // <-- El Portero nos deja pasar con esto
             });
             const result = await response.json();
@@ -459,7 +459,7 @@
             return;
         }
         try {
-            const response = await fetch("http://localhost:8080/api/cobranzas/cartera", {
+            const response = await fetch("/api/cobranzas/cartera", {
                 method: "GET",
                 headers: {
                     "Authorization": "Bearer " + token,

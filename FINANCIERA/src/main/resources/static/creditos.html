@@ -171,7 +171,7 @@
     async function cargarSolicitudes() {
         try {
             // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
-            const response = await fetch(`http://localhost:8080/api/prestamos/usuario/${usuario.id}`, {
+            const response = await fetch(`/api/prestamos/usuario/${usuario.id}`, {
                 method: 'GET',
                 headers: getHeaders()
             });
@@ -257,7 +257,7 @@
 
         try {
             // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ TAMBIÉN
-            const response = await fetch(`http://localhost:8080/api/prestamos/${solicitudId}/cronograma`, {
+            const response = await fetch(`/api/prestamos/${solicitudId}/cronograma`, {
                 method: 'GET',
                 headers: getHeaders()
             });

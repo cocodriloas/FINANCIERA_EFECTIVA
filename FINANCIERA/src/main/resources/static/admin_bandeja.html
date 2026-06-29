@@ -154,7 +154,7 @@
 
     async function cargarSolicitudes() {
         try {
-            const response = await fetch('http://localhost:8080/api/prestamos/todas', {
+            const response = await fetch('/api/prestamos/todas', {
                 headers: getHeaders()
             });
             const result = await response.json();

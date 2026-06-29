@@ -175,7 +175,7 @@
     async function cargarPerfil() {
         try {
             // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
-            const resCuenta = await fetch(`http://localhost:8080/api/cuentas/usuario/${usuario.id}`, {
+            const resCuenta = await fetch(`/api/cuentas/usuario/${usuario.id}`, {
                 method: 'GET',
                 headers: getHeaders()
             });
@@ -191,7 +191,7 @@
             }
 
             // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
-            const resSol = await fetch(`http://localhost:8080/api/prestamos/usuario/${usuario.id}`, {
+            const resSol = await fetch(`/api/prestamos/usuario/${usuario.id}`, {
                 method: 'GET',
                 headers: getHeaders()
             });

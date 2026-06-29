@@ -282,7 +282,7 @@
 
         try {
             // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
-            const response = await fetch('http://localhost:8080/api/prestamos/solicitar', {
+            const response = await fetch('/api/prestamos/solicitar', {
                 method: 'POST',
                 headers: getHeaders(), // <-- El portero ahora lee el token
                 body: JSON.stringify(payload)

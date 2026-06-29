@@ -163,7 +163,7 @@
     async function cargarCuentas() {
         try {
             // SE AÑADIÓ LA LLAVE DE SEGURIDAD (getHeaders) AQUÍ
-            const response = await fetch(`http://localhost:8080/api/cuentas/usuario/${usuario.id}`, {
+            const response = await fetch(`/api/cuentas/usuario/${usuario.id}`, {
                 method: 'GET',
                 headers: getHeaders()
             });

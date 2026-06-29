@@ -16,7 +16,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/cobranzas")
-@CrossOrigin(origins = "${FRONTEND_URL:http://localhost:8080}")
+    @CrossOrigin(origins = "${FRONTEND_URL:http://localhost:8080}")
 public class CobranzaController {
 
     private final SolicitudPrestamoRepository solicitudRepo;
