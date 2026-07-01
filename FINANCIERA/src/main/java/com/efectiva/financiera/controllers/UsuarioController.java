@@ -96,7 +96,8 @@ public class UsuarioController {
             // 1. Intentar loguear como CLIENTE
             try {
                 Usuario usuario = usuarioService.login(dto);
-                String token = jwtUtil.generarToken(usuario.getCorreo(), "CLIENTE");
+                // CORRECCIÓN JWT: Ahora incluimos el ID del usuario como tercer parámetro
+                String token = jwtUtil.generarToken(usuario.getCorreo(), "CLIENTE", usuario.getId().toString());
 
                 intentosFallidos.remove(dto.getCorreo()); // Resetea los intentos si es exitoso
 
@@ -117,7 +118,8 @@ public class UsuarioController {
             if (asesorOpt.isPresent()) {
                 Asesor asesor = asesorOpt.get();
                 if (asesor.getPassword().equals(dto.getPassword())) {
-                    String token = jwtUtil.generarToken(asesor.getCorreo(), asesor.getRol());
+                    // CORRECCIÓN JWT: Ahora incluimos el ID del asesor/gerente como tercer parámetro
+                    String token = jwtUtil.generarToken(asesor.getCorreo(), asesor.getRol(), asesor.getId().toString());
 
                     intentosFallidos.remove(dto.getCorreo()); // Resetea los intentos si es exitoso
 

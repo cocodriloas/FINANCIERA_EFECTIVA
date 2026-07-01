@@ -19,11 +19,12 @@ public class JwtUtil {
     // Tiempo de validez del token: 10 horas
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10;
 
-    // Método para crear la "Pulsera VIP"
-    public String generarToken(String correo, String rol) {
+    // Método para crear la "Pulsera VIP" (AHORA INCLUYE EL ID)
+    public String generarToken(String correo, String rol, String idUsuario) {
         return Jwts.builder()
                 .setSubject(correo)
                 .claim("rol", rol) // Guardamos el rol (CLIENTE, ASESOR, GERENTE) dentro del token
+                .setId(idUsuario) // <-- AQUÍ GUARDAMOS EL ID EN EL TOKEN
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SECRET_KEY)
@@ -61,6 +62,7 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
     public String extraerId(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY)
